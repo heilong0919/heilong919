@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>饭店管理系统 (前台+管理)</title>
+    <title>?????? (??+??)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -10,7 +10,7 @@
         body { background: #f0f2f5; color: #333; line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-        /* ===== 登录界面样式 ===== */
+        /* ===== ?????? ===== */
         #loginContainer {
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -25,7 +25,7 @@
         .login-btn:hover { background: #4338ca; }
         #loginError { color: #ef4444; text-align: center; margin-top: 1rem; min-height: 1.5rem; }
 
-        /* ===== 主应用界面（登录后显示）===== */
+        /* ===== ????????????===== */
         #appContainer { display: none; }
         header {
             background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white;
@@ -35,14 +35,14 @@
         .user-bar { text-align: right; margin-bottom: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.9); }
         .user-bar a { color: #fbbf24; margin-left: 15px; text-decoration: none; }
 
-        /* 标签页样式 */
+        /* ????? */
         .tabs { display: flex; background: white; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .tab { flex: 1; padding: 18px; text-align: center; cursor: pointer; background: #f8fafc; font-weight: 600; color: #64748b; transition: all 0.3s; border-bottom: 3px solid transparent; }
         .tab.active { background: white; color: #4f46e5; border-bottom-color: #4f46e5; }
         .tab-content { display: none; background: white; padding: 2rem; border-radius: 0 0 12px 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); margin-bottom: 2rem; }
         .tab-content.active { display: block; }
 
-        /* 通用卡片和按钮 */
+        /* ??????? */
         .card { background: #f8fafc; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; }
         .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
         .btn-primary { background: #4f46e5; color: white; }
@@ -50,7 +50,7 @@
         .btn-danger { background: #ef4444; color: white; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
-        /* 菜单和订单网格 */
+        /* ??????? */
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
         .menu-item { background: white; padding: 1.2rem; border-radius: 10px; cursor: pointer; border: 2px solid #e2e8f0; transition: all 0.3s; text-align: center; }
         .menu-item:hover, .menu-item.selected { border-color: #4f46e5; box-shadow: 0 5px 15px rgba(79, 70, 229, 0.1); }
@@ -62,49 +62,49 @@
         .order-item { padding: 1rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
         .order-item-total { font-weight: 800; color: #0f172a; }
 
-        /* 表单样式 */
+        /* ???? */
         .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
         .form-input { flex: 1; padding: 12px 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
         .form-input:focus { border-color: #4f46e5; outline: none; }
     </style>
 </head>
 <body>
-    <!-- ===== 登录界面 ===== -->
+    <!-- ===== ???? ===== -->
     <div id="loginContainer">
         <div class="login-box">
-            <h2 class="login-title">🍜 饭店管理系统</h2>
-            <p style="text-align:center; color:#666; margin-bottom:2rem;">请使用管理员账号登录</p>
-            <input type="email" id="loginEmail" class="login-input" placeholder="管理员邮箱" value="heilong@your-restaurant.com">
-            <input type="password" id="loginPassword" class="login-input" placeholder="密码" value="a43863422">
-            <button id="loginButton" class="login-btn">登录系统</button>
+            <h2 class="login-title">? ??????</h2>
+            <p style="text-align:center; color:#666; margin-bottom:2rem;">??????????</p>
+            <input type="email" id="loginEmail" class="login-input" placeholder="?????" value="heilong@your-restaurant.com">
+            <input type="password" id="loginPassword" class="login-input" placeholder="??" value="a43863422">
+            <button id="loginButton" class="login-btn">????</button>
             <p id="loginError"></p>
         </div>
     </div>
 
-    <!-- ===== 主应用界面 (登录后显示) ===== -->
+    <!-- ===== ????? (?????) ===== -->
     <div id="appContainer">
         <div class="container">
             <header>
                 <div class="user-bar">
-                    欢迎，<span id="currentUserEmail"></span> | 
-                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
+                    ???<span id="currentUserEmail"></span> | 
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ????</a>
                 </div>
-                <h1><i class="fas fa-store"></i> 饭店管理系统</h1>
-                <p>前台点餐、后厨同步、菜单与铃声管理</p>
+                <h1><i class="fas fa-store"></i> ??????</h1>
+                <p>?????????????????</p>
             </header>
 
             <div class="tabs">
-                <div class="tab active" onclick="switchTab('order')">📱 点餐下单</div>
-                <div class="tab" onclick="switchTab('menu')">📝 菜单管理</div>
-                <div class="tab" onclick="switchTab('sound')">🔔 铃声管理</div>
+                <div class="tab active" onclick="switchTab('order')">? ????</div>
+                <div class="tab" onclick="switchTab('menu')">? ????</div>
+                <div class="tab" onclick="switchTab('sound')">? ????</div>
             </div>
 
-            <!-- 标签1：点餐下单 -->
+            <!-- ??1????? -->
             <div id="tab-order" class="tab-content active">
                 <div class="card">
-                    <h3><i class="fas fa-utensils"></i> 菜品选择</h3>
+                    <h3><i class="fas fa-utensils"></i> ????</h3>
                     <div class="menu-grid" id="orderMenuGrid">
-                        <!-- 菜单由JS动态加载 -->
+                        <!-- ???JS???? -->
                     </div>
                     <div class="form-row">
                         <div style="display:flex; align-items:center; background:#e2e8f0; border-radius:8px;">
@@ -112,74 +112,75 @@
                             <input type="text" id="orderQuantity" value="1" readonly style="width:70px; text-align:center; border:none; background:transparent; font-size:1.2rem; font-weight:bold;">
                             <button onclick="changeQuantity(1)" style="width:50px; height:50px; border:none; background:#cbd5e1; font-size:1.5rem; cursor:pointer;">+</button>
                         </div>
-                        <button class="btn btn-primary" onclick="addToCurrentOrder()"><i class="fas fa-plus"></i> 加入订单</button>
-                        <button class="btn btn-success" onclick="submitOrderToKitchen()"><i class="fas fa-paper-plane"></i> 发送到厨房</button>
+                        <button class="btn btn-primary" onclick="addToCurrentOrder()"><i class="fas fa-plus"></i> ????</button>
+                        <button class="btn btn-success" onclick="submitOrderToKitchen()"><i class="fas fa-paper-plane"></i> ?????</button>
                     </div>
                 </div>
                 <div class="card">
-                    <h3><i class="fas fa-shopping-cart"></i> 当前订单</h3>
+                    <h3><i class="fas fa-shopping-cart"></i> ????</h3>
                     <div class="orders-list" id="currentOrderList">
-                        <p style="text-align:center; color:#94a3b8;">当前订单为空</p>
+                        <p style="text-align:center; color:#94a3b8;">??????</p>
                     </div>
-                    <button class="btn btn-danger" onclick="clearCurrentOrder()"><i class="fas fa-trash"></i> 清空当前订单</button>
+                    <button class="btn btn-danger" onclick="clearCurrentOrder()"><i class="fas fa-trash"></i> ??????</button>
                 </div>
             </div>
 
-            <!-- 标签2：菜单管理 -->
+            <!-- ??2????? -->
             <div id="tab-menu" class="tab-content">
                 <div class="card">
-                    <h3><i class="fas fa-plus-circle"></i> 添加新菜品</h3>
+                    <h3><i class="fas fa-plus-circle"></i> ?????</h3>
                     <div class="form-row">
-                        <input type="text" id="newDishName" class="form-input" placeholder="菜品名称 (如：鱼香肉丝)">
-                        <input type="number" step="0.01" id="newDishPrice" class="form-input" placeholder="价格 (如：32.00)">
-                        <input type="text" id="newDishCategory" class="form-input" placeholder="分类 (如：热菜、主食)">
+                        <input type="text" id="newDishName" class="form-input" placeholder="???? (??????)">
+                        <input type="number" step="0.01" id="newDishPrice" class="form-input" placeholder="?? (??32.00)">
+                        <input type="text" id="newDishCategory" class="form-input" placeholder="?? (???????)">
                     </div>
-                    <button class="btn btn-primary" onclick="addNewMenuItem()"><i class="fas fa-save"></i> 保存菜品</button>
+                    <button class="btn btn-primary" onclick="addNewMenuItem()"><i class="fas fa-save"></i> ????</button>
                 </div>
                 <div class="card">
-                    <h3><i class="fas fa-list"></i> 所有菜品</h3>
+                    <h3><i class="fas fa-list"></i> ????</h3>
                     <div class="menu-grid" id="manageMenuGrid">
-                        <!-- 管理菜单由JS动态加载 -->
+                        <!-- ?????JS???? -->
                     </div>
                 </div>
             </div>
 
-            <!-- 标签3：铃声管理 -->
+            <!-- ??3????? -->
             <div id="tab-sound" class="tab-content">
                 <div class="card">
-                    <h3><i class="fas fa-plus-circle"></i> 添加新提示音</h3>
+                    <h3><i class="fas fa-plus-circle"></i> ??????</h3>
                     <div class="form-row">
-                        <input type="text" id="newSoundName" class="form-input" placeholder="铃声名称 (如：经典提示音)">
-                        <input type="text" id="newSoundUrl" class="form-input" placeholder="MP3音频文件直链 (URL)">
+                        <input type="text" id="newSoundName" class="form-input" placeholder="???? (???????)">
+                        <input type="text" id="newSoundUrl" class="form-input" placeholder="MP3?????? (URL)">
                     </div>
-                    <button class="btn btn-primary" onclick="addNewSound()"><i class="fas fa-save"></i> 保存铃声</button>
+                    <button class="btn btn-primary" onclick="addNewSound()"><i class="fas fa-save"></i> ????</button>
                 </div>
                 <div class="card">
-                    <h3><i class="fas fa-volume-up"></i> 铃声库</h3>
+                    <h3><i class="fas fa-volume-up"></i> ???</h3>
                     <div id="soundOptionsList">
-                        <!-- 声音选项由JS动态加载 -->
+                        <!-- ?????JS???? -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ===== 引入Supabase JS SDK ===== -->
+    <!-- ===== ??Supabase JS SDK ===== -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // ====================== 配置区域 ======================
-        // !!! 重要：将以下两个值替换成你自己的Supabase项目信息 !!!
-        const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的 URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的 Anon Key
-           // ====================================================
+        // ====================================================
+        //                 ??????
+        // !!! ?????????????????????? !!!
+        // ====================================================
+        const SUPABASE_URL = 'https://????????.supabase.co'; // TODO: ????? Supabase URL
+        const SUPABASE_ANON_KEY = '??????????'; // TODO: ????? Supabase Anon Key
+        // ====================================================
 
-        // 初始化Supabase客户端
+        // ? ????? Supabase ??? (????)
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
             auth: { persistSession: true }
         });
 
-
-        // 全局应用状态
+        // ??????
         const appState = {
             currentUser: null,
             menuItems: [],
@@ -188,20 +189,30 @@
             selectedDishId: null
         };
 
-        // ====================== 认证与登录 ======================
+        // ====================== ????? ======================
         async function initApp() {
-            // 检查现有登录会话
-            const { data: { session } } = await supabase.auth.getSession();
+            console.log('?????...');
+            // ????????
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (error) {
+                console.error('??????:', error);
+                showLoginScreen();
+                return;
+            }
+            
             if (session) {
                 appState.currentUser = session.user;
+                console.log('????:', appState.currentUser.email);
                 showMainApp();
-                loadInitialData();
+                await loadInitialData();
             } else {
                 showLoginScreen();
             }
-            // 监听登录状态变化
+            
+            // ????????
             supabase.auth.onAuthStateChange((event, session) => {
-                if (event === 'SIGNED_IN') {
+                console.log('??????:', event);
+                if (event === 'SIGNED_IN' && session) {
                     appState.currentUser = session.user;
                     showMainApp();
                     loadInitialData();
@@ -215,15 +226,17 @@
         function showLoginScreen() {
             document.getElementById('loginContainer').style.display = 'flex';
             document.getElementById('appContainer').style.display = 'none';
+            console.log('??????');
         }
 
         function showMainApp() {
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             document.getElementById('currentUserEmail').textContent = appState.currentUser.email;
+            console.log('???????');
         }
 
-        // 登录按钮事件
+        // ??????
         document.getElementById('loginButton').addEventListener('click', async () => {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -231,23 +244,30 @@
             const btn = document.getElementById('loginButton');
 
             if (!email || !password) {
-                errorEl.textContent = '请输入邮箱和密码';
+                errorEl.textContent = '????????';
                 return;
             }
 
-            btn.textContent = '登录中...';
+            btn.textContent = '???...';
             btn.disabled = true;
             errorEl.textContent = '';
 
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-            if (error) {
-                errorEl.textContent = `登录失败: ${error.message}`;
-                btn.textContent = '登录系统';
-                btn.disabled = false;
-            } else {
+                if (error) {
+                    throw error;
+                }
+                
                 errorEl.textContent = '';
-                btn.textContent = '登录成功！';
+                btn.textContent = '?????';
+                // ????????? onAuthStateChange ??
+                
+            } catch (error) {
+                console.error('????:', error);
+                errorEl.textContent = `????: ${error.message}`;
+                btn.textContent = '????';
+                btn.disabled = false;
             }
         });
 
@@ -255,13 +275,20 @@
             await supabase.auth.signOut();
         }
 
-        // ====================== 数据加载 ======================
+        // ====================== ???? ======================
         async function loadInitialData() {
-            await Promise.all([
-                loadMenuItems(),
-                loadSoundOptions()
-            ]);
-            renderOrderMenuGrid();
+            console.log('??????...');
+            try {
+                await Promise.all([
+                    loadMenuItems(),
+                    loadSoundOptions()
+                ]);
+                renderOrderMenuGrid();
+                console.log('????????');
+            } catch (error) {
+                console.error('????????:', error);
+                alert('??????????????');
+            }
         }
 
         async function loadMenuItems() {
@@ -269,7 +296,13 @@
                 .from('menu_items')
                 .select('*')
                 .order('id');
-            if (!error) appState.menuItems = data || [];
+                
+            if (error) {
+                console.error('??????:', error);
+                throw error;
+            }
+            appState.menuItems = data || [];
+            console.log('????????', appState.menuItems.length, '?');
         }
 
         async function loadSoundOptions() {
@@ -277,58 +310,87 @@
                 .from('sound_options')
                 .select('*')
                 .order('id');
-            if (!error) appState.soundOptions = data || [];
+                
+            if (error) {
+                console.error('??????:', error);
+                throw error;
+            }
+            appState.soundOptions = data || [];
+            console.log('??????????', appState.soundOptions.length, '?');
         }
 
-        // ====================== 标签页切换 ======================
+        // ====================== ????? ======================
         function switchTab(tabName) {
-            // 更新标签按钮状态
+            console.log('?????:', tabName);
+            // ????????
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[onclick*="${tabName}"]`).classList.add('active');
-            // 更新内容区域
+            const activeTab = document.querySelector(`.tab[onclick*="${tabName}"]`);
+            if (activeTab) activeTab.classList.add('active');
+            
+            // ??????
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
-            // 如果是管理标签，重新渲染管理视图
-            if (tabName === 'menu') renderManageMenuGrid();
-            if (tabName === 'sound') renderSoundOptionsList();
+            
+            // ????????????????
+            if (tabName === 'menu') {
+                renderManageMenuGrid();
+            }
+            if (tabName === 'sound') {
+                renderSoundOptionsList();
+            }
         }
 
-        // ====================== 点餐下单功能 ======================
+        // ====================== ?????? ======================
         function renderOrderMenuGrid() {
             const grid = document.getElementById('orderMenuGrid');
+            if (!grid) return;
+            
             if (appState.menuItems.length === 0) {
-                grid.innerHTML = '<p>暂无菜品，请先在菜单管理中添加。</p>';
+                grid.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:2rem;">????????????????</p>';
                 return;
             }
+            
             grid.innerHTML = appState.menuItems.map(item => `
                 <div class="menu-item ${appState.selectedDishId === item.id ? 'selected' : ''}" 
                      onclick="selectDishForOrder(${item.id})">
                     <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-price">¥${item.price}</div>
+                    <div class="menu-item-price">?${item.price.toFixed(2)}</div>
                     <div class="menu-item-category">${item.category}</div>
                 </div>
             `).join('');
         }
 
-        window.selectDishForOrder = function(dishId) {
+        function selectDishForOrder(dishId) {
             appState.selectedDishId = dishId;
             renderOrderMenuGrid();
-        };
+            console.log('????:', dishId);
+        }
 
-        window.changeQuantity = function(delta) {
+        function changeQuantity(delta) {
             const input = document.getElementById('orderQuantity');
             let val = parseInt(input.value) + delta;
             if (val < 1) val = 1;
             input.value = val;
-        };
+        }
 
-        window.addToCurrentOrder = function() {
+        function addToCurrentOrder() {
             if (!appState.selectedDishId) {
-                alert('请先选择一个菜品！');
+                alert('?????????');
                 return;
             }
+            
             const dish = appState.menuItems.find(d => d.id === appState.selectedDishId);
+            if (!dish) {
+                alert('??????');
+                return;
+            }
+            
             const qty = parseInt(document.getElementById('orderQuantity').value);
+            if (isNaN(qty) || qty < 1) {
+                alert('?????');
+                return;
+            }
+            
             const existing = appState.currentOrder.find(item => item.id === dish.id);
             if (existing) {
                 existing.quantity += qty;
@@ -340,19 +402,25 @@
                     quantity: qty
                 });
             }
+            
             renderCurrentOrder();
-            // 重置选择
+            // ????
             appState.selectedDishId = null;
             document.getElementById('orderQuantity').value = 1;
             renderOrderMenuGrid();
-        };
+            
+            console.log('??????:', dish.name, 'x', qty);
+        }
 
         function renderCurrentOrder() {
             const container = document.getElementById('currentOrderList');
+            if (!container) return;
+            
             if (appState.currentOrder.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#94a3b8;">当前订单为空</p>';
+                container.innerHTML = '<p style="text-align:center; color:#94a3b8;">??????</p>';
                 return;
             }
+            
             let total = 0;
             container.innerHTML = appState.currentOrder.map(item => {
                 const subtotal = item.price * item.quantity;
@@ -361,119 +429,182 @@
                     <div class="order-item">
                         <div>
                             <strong>${item.name}</strong><br>
-                            <small>单价: ¥${item.price}</small>
+                            <small>??: ?${item.price.toFixed(2)}</small>
                         </div>
                         <div>
                             <strong>x${item.quantity}</strong><br>
-                            <strong class="order-item-total">¥${subtotal.toFixed(2)}</strong>
+                            <strong class="order-item-total">?${subtotal.toFixed(2)}</strong>
                         </div>
                     </div>
                 `;
             }).join('') + `
                 <div class="order-item" style="background:#f1f5f9; font-weight:800;">
-                    <div>订单总计</div>
-                    <div class="order-item-total">¥${total.toFixed(2)}</div>
+                    <div>????</div>
+                    <div class="order-item-total">?${total.toFixed(2)}</div>
                 </div>
             `;
         }
 
-        window.clearCurrentOrder = function() {
-            if (confirm('确定要清空当前订单吗？')) {
-                appState.currentOrder = [];
-                renderCurrentOrder();
-            }
-        };
-
-        // 【核心功能】提交订单到云端数据库
-        window.submitOrderToKitchen = async function() {
+        function clearCurrentOrder() {
             if (appState.currentOrder.length === 0) {
-                alert('当前订单为空！');
+                alert('????????');
                 return;
             }
+            
+            if (confirm('???????????')) {
+                appState.currentOrder = [];
+                renderCurrentOrder();
+                console.log('???????');
+            }
+        }
+
+        // ????????????????
+        async function submitOrderToKitchen() {
+            if (appState.currentOrder.length === 0) {
+                alert('???????');
+                return;
+            }
+            
+            // ??????
+            if (!appState.currentUser) {
+                alert('?????');
+                return;
+            }
+            
             const orderToSend = {
                 items: appState.currentOrder,
                 status: 'new'
             };
-            const { data, error } = await supabase
-                .from('orders')
-                .insert([orderToSend])
-                .select();
-            if (error) {
-                console.error('提交订单失败:', error);
-                alert('提交失败，请检查网络或控制台错误信息。');
-            } else {
-                alert(`订单 #${data[0].id} 已成功发送到后厨！`);
+            
+            try {
+                const { data, error } = await supabase
+                    .from('orders')
+                    .insert([orderToSend])
+                    .select();
+                    
+                if (error) {
+                    throw error;
+                }
+                
+                alert(`?? #${data[0].id} ?????????`);
                 appState.currentOrder = [];
                 renderCurrentOrder();
+                console.log('??????:', data[0]);
+                
+            } catch (error) {
+                console.error('??????:', error);
+                alert('????: ' + error.message);
             }
-        };
+        }
 
-        // ====================== 菜单管理功能 ======================
+        // ====================== ?????? ======================
         function renderManageMenuGrid() {
             const grid = document.getElementById('manageMenuGrid');
+            if (!grid) return;
+            
             if (appState.menuItems.length === 0) {
-                grid.innerHTML = '<p>暂无菜品。</p>';
+                grid.innerHTML = '<p style="text-align:center; color:#94a3b8;">?????</p>';
                 return;
             }
+            
             grid.innerHTML = appState.menuItems.map(item => `
                 <div class="menu-item">
                     <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-price">¥${item.price}</div>
+                    <div class="menu-item-price">?${item.price.toFixed(2)}</div>
                     <div class="menu-item-category">${item.category}</div>
                     <button onclick="deleteMenuItem(${item.id})" class="btn btn-danger" style="margin-top:10px; width:100%; padding:8px;">
-                        <i class="fas fa-trash"></i> 删除
+                        <i class="fas fa-trash"></i> ??
                     </button>
                 </div>
             `).join('');
         }
 
-        window.addNewMenuItem = async function() {
+        async function addNewMenuItem() {
             const name = document.getElementById('newDishName').value.trim();
             const price = parseFloat(document.getElementById('newDishPrice').value);
             const category = document.getElementById('newDishCategory').value.trim();
-            if (!name || isNaN(price) || !category) {
-                alert('请填写完整的菜品信息！');
+            
+            if (!name) {
+                alert('????????');
                 return;
             }
-            const { data, error } = await supabase
-                .from('menu_items')
-                .insert([{ name, price, category }])
-                .select();
-            if (error) {
-                alert('添加失败: ' + error.message);
-            } else {
+            
+            if (isNaN(price) || price <= 0) {
+                alert('???????????0??');
+                return;
+            }
+            
+            if (!category) {
+                alert('????????');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('menu_items')
+                    .insert([{ name, price, category }])
+                    .select();
+                    
+                if (error) {
+                    throw error;
+                }
+                
                 appState.menuItems.push(data[0]);
                 renderOrderMenuGrid();
                 renderManageMenuGrid();
-                // 清空表单
+                
+                // ????
                 document.getElementById('newDishName').value = '';
                 document.getElementById('newDishPrice').value = '';
                 document.getElementById('newDishCategory').value = '';
-                alert(`"${name}" 已添加到菜单！`);
+                
+                alert(`"${name}" ?????????`);
+                console.log('??????:', data[0]);
+                
+            } catch (error) {
+                console.error('??????:', error);
+                alert('????: ' + error.message);
             }
-        };
+        }
 
-        window.deleteMenuItem = async function(id) {
-            if (!confirm('确定要删除这个菜品吗？')) return;
-            const { error } = await supabase
-                .from('menu_items')
-                .delete()
-                .eq('id', id);
-            if (!error) {
+        async function deleteMenuItem(id) {
+            if (!confirm('???????????????????')) {
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('menu_items')
+                    .delete()
+                    .eq('id', id);
+                    
+                if (error) {
+                    throw error;
+                }
+                
                 appState.menuItems = appState.menuItems.filter(item => item.id !== id);
                 renderOrderMenuGrid();
                 renderManageMenuGrid();
-                alert('菜品删除成功！');
+                
+                alert('???????');
+                console.log('???????ID:', id);
+                
+            } catch (error) {
+                console.error('??????:', error);
+                alert('????: ' + error.message);
             }
-        };
+        }
 
-        // ====================== 铃声管理功能 ======================
+        // ====================== ?????? ======================
         function renderSoundOptionsList() {
             const container = document.getElementById('soundOptionsList');
+            if (!container) return;
+            
             if (appState.soundOptions.length === 0) {
-                container.innerHTML = '<p>暂无提示音。</p>';
+                container.innerHTML = '<p style="text-align:center; color:#94a3b8;">??????</p>';
                 return;
             }
+            
             container.innerHTML = appState.soundOptions.map(sound => `
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; background:white; border-radius:10px; margin-bottom:1rem;">
                     <div>
@@ -482,62 +613,118 @@
                     </div>
                     <div>
                         <button onclick="playSoundPreview('${sound.url}')" class="btn" style="background:#e0f2fe; color:#0369a1; margin-right:10px;">
-                            <i class="fas fa-play"></i> 试听
+                            <i class="fas fa-play"></i> ??
                         </button>
                         <button onclick="deleteSoundOption(${sound.id})" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> 删除
+                            <i class="fas fa-trash"></i> ??
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        window.playSoundPreview = function(url) {
+        function playSoundPreview(url) {
             const audio = new Audio(url);
-            audio.play().catch(e => console.log('播放失败:', e));
-        };
+            audio.play().catch(e => {
+                console.log('????:', e);
+                alert('????????????????');
+            });
+        }
 
-        window.addNewSound = async function() {
+        async function addNewSound() {
             const name = document.getElementById('newSoundName').value.trim();
             const url = document.getElementById('newSoundUrl').value.trim();
-            if (!name || !url) {
-                alert('请填写完整的铃声信息！');
+            
+            if (!name) {
+                alert('????????');
                 return;
             }
-            const { data, error } = await supabase
-                .from('sound_options')
-                .insert([{ name, url }])
-                .select();
-            if (error) {
-                alert('添加失败: ' + error.message);
-            } else {
+            
+            if (!url) {
+                alert('??????????');
+                return;
+            }
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('??????HTTP/HTTPS???');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('sound_options')
+                    .insert([{ name, url }])
+                    .select();
+                    
+                if (error) {
+                    throw error;
+                }
+                
                 appState.soundOptions.push(data[0]);
                 renderSoundOptionsList();
-                // 清空表单
+                
+                // ????
                 document.getElementById('newSoundName').value = '';
                 document.getElementById('newSoundUrl').value = '';
-                alert(`"${name}" 已添加到铃声库！`);
+                
+                alert(`"${name}" ??????????`);
+                console.log('??????:', data[0]);
+                
+            } catch (error) {
+                console.error('??????:', error);
+                alert('????: ' + error.message);
             }
-        };
+        }
 
-        window.deleteSoundOption = async function(id) {
-            if (!confirm('确定要删除这个铃声吗？')) return;
-            const { error } = await supabase
-                .from('sound_options')
-                .delete()
-                .eq('id', id);
-            if (!error) {
+        async function deleteSoundOption(id) {
+            if (!confirm('???????????????????')) {
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('sound_options')
+                    .delete()
+                    .eq('id', id);
+                    
+                if (error) {
+                    throw error;
+                }
+                
                 appState.soundOptions = appState.soundOptions.filter(s => s.id !== id);
                 renderSoundOptionsList();
-                alert('铃声删除成功！');
+                
+                alert('???????');
+                console.log('???????ID:', id);
+                
+            } catch (error) {
+                console.error('??????:', error);
+                alert('????: ' + error.message);
             }
-        };
+        }
 
-        // ====================== 启动应用 ======================
-        document.addEventListener('DOMContentLoaded', initApp);
+        // ====================== ???? ======================
+        // ?????????????
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
+        // ????????????????HTML?onclick????
+        window.selectDishForOrder = selectDishForOrder;
+        window.changeQuantity = changeQuantity;
+        window.addToCurrentOrder = addToCurrentOrder;
+        window.submitOrderToKitchen = submitOrderToKitchen;
+        window.clearCurrentOrder = clearCurrentOrder;
+        window.switchTab = switchTab;
+        window.addNewMenuItem = addNewMenuItem;
+        window.deleteMenuItem = deleteMenuItem;
+        window.addNewSound = addNewSound;
+        window.deleteSoundOption = deleteSoundOption;
+        window.playSoundPreview = playSoundPreview;
+        window.logout = logout;
     </script>
 </body>
 </html>
 
-</body>
-</html>
