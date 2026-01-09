@@ -171,12 +171,7 @@
         // !!! 重要：将以下两个值替换成你自己的Supabase项目信息 !!!
         const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的 URL
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的 Anon Key
-        // ====================================================
-
-        // 初始化Supabase客户端
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: { persistSession: true }
-        });
+       
 
         // 全局应用状态
         const appState = {
