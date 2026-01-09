@@ -6,258 +6,189 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        body { background: #0f172a; color: #f8fafc; line-height: 1.6; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-
-        header {
-            background: linear-gradient(135deg, #ea580c, #dc2626);
-            padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem;
-            text-align: center; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
-        }
-        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-        .subtitle { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
-
-        .stats-bar {
-            display: flex; justify-content: space-between; background: #1e293b;
-            padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-        .stat-item { text-align: center; }
-        .stat-number { font-size: 2rem; font-weight: 800; color: #fbbf24; }
-
-        .orders-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { background: linear-gradient(135deg, #ea580c, #dc2626); padding: 25px; border-radius: 16px; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3); }
+        .stats { display: flex; justify-content: space-around; background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 25px; text-align: center; }
+        .stat-box { flex: 1; }
+        .stat-number { font-size: 3em; font-weight: 900; color: #fbbf24; line-height: 1.2; }
+        .orders-container { display: flex; flex-direction: column; gap: 20px; }
         .order-card {
-            background: #1e293b; border-radius: 16px; padding: 1.8rem;
-            border-left: 6px solid #ea580c; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            animation: pulse-new 2s infinite;
+            background: #1e293b; border-radius: 14px; padding: 25px; border-left: 8px solid #ea580c;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); animation: pulse-new 2s infinite;
         }
         .order-card.cooking { border-left-color: #0ea5e9; animation: none; }
-        .order-card.done { border-left-color: #10b981; opacity: 0.7; animation: none; }
         @keyframes pulse-new {
-            0% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.5); }
-            70% { box-shadow: 0 0 0 12px rgba(234, 88, 12, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(234, 88, 12, 0); }
             100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
         }
-
-        .order-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 2px solid #334155;
-        }
-        .order-id { font-size: 1.5rem; font-weight: 800; color: #fbbf24; }
-        .order-time { color: #94a3b8; font-size: 0.95rem; }
-        .order-status {
-            padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;
-        }
+        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #334155; }
+        .order-id { font-size: 1.6em; font-weight: 900; color: #fbbf24; }
+        .order-time { color: #94a3b8; font-size: 0.95em; }
+        .order-status { padding: 6px 18px; border-radius: 20px; font-weight: 800; font-size: 0.9em; }
         .status-new { background: #fed7aa; color: #9a3412; }
         .status-cooking { background: #bae6fd; color: #075985; }
-        .status-done { background: #bbf7d0; color: #166534; }
-
-        .order-items { margin: 1.5rem 0; }
-        .order-item {
-            display: flex; justify-content: space-between; padding: 0.8rem 0;
-            border-bottom: 1px dashed #475569;
-        }
-        .item-total { font-weight: 700; color: #fbbf24; }
-
-        .order-footer {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-top: 1.5rem; padding-top: 1.2rem; border-top: 2px solid #334155;
-            font-size: 1.2rem;
-        }
-        .order-actions { display: flex; gap: 1rem; }
-        .action-btn {
-            padding: 10px 20px; border: none; border-radius: 8px; font-weight: 700;
-            cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
-        }
+        .order-items { margin: 20px 0; }
+        .order-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed #475569; }
+        .item-total { font-weight: 800; color: #fbbf24; }
+        .order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 2px solid #334155; font-size: 1.3em; }
+        .order-actions { display: flex; gap: 15px; }
+        .action-btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s; }
         .btn-start { background: #0ea5e9; color: white; }
         .btn-finish { background: #10b981; color: white; }
-        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
-        .empty-state {
-            text-align: center; padding: 4rem 2rem; color: #64748b;
-        }
-        .empty-state i { font-size: 4rem; margin-bottom: 1.5rem; color: #334155; }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .empty-state { text-align: center; padding: 60px 30px; color: #64748b; }
+        .empty-state i { font-size: 4em; margin-bottom: 20px; color: #334155; }
+        .sound-select { padding: 10px; border-radius: 6px; background: #1e293b; color: white; border: 2px solid #475569; margin-left: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1><i class="fas fa-fire"></i> 后厨订单显示系统</h1>
-            <p class="subtitle">实时订单监控 | 状态更新 | 声音提醒</p >
+            <p>实时接收前台订单 | 自动播放提示音</p>
+            <div style="margin-top: 15px; font-size: 0.9em; color: #fef3c7;">
+                提示音:
+                <select id="soundSelect" class="sound-select">
+                    <option value="">-- 选择提示音 --</option>
+                </select>
+                <button onclick="testSelectedSound()" style="margin-left:10px; padding:8px 15px; background:#475569; color:white; border:none; border-radius:6px; cursor:pointer;"><i class="fas fa-play"></i> 试听</button>
+            </div>
         </header>
-
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div>新订单</div>
-                <div class="stat-number" id="countNew">0</div>
-            </div>
-            <div class="stat-item">
-                <div>制作中</div>
-                <div class="stat-number" id="countCooking">0</div>
-            </div>
-            <div class="stat-item">
-                <div>待处理</div>
-                <div class="stat-number" id="countTotal">0</div>
-            </div>
+        <div class="stats">
+            <div class="stat-box"><div>新订单</div><div class="stat-number" id="countNew">0</div></div>
+            <div class="stat-box"><div>制作中</div><div class="stat-number" id="countCooking">0</div></div>
+            <div class="stat-box"><div>总待处理</div><div class="stat-number" id="countTotal">0</div></div>
         </div>
-
         <div id="ordersContainer" class="orders-container">
             <div class="empty-state" id="emptyState">
                 <i class="fas fa-utensils"></i>
                 <h3>暂无待处理订单</h3>
-                <p>新订单将在这里实时显示并播放提示音</p >
+                <p>新订单将在这里实时显示并播放提示音</p>
             </div>
-            <!-- 订单卡片将由JavaScript动态生成 -->
         </div>
     </div>
 
-    <!-- 引入Supabase JS SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // ====================== 配置区域 ======================
-        // !!! 重要：将以下两个值替换成你自己的Supabase项目信息（与前台相同） !!!
-        const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的 URL
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的 Anon Key
-        // ====================================================
+        // ==================== 配置区 (必须和前台一致!) ====================
+        const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的密钥
+        // =========================================================
 
-        // 初始化Supabase客户端
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // 全局状态
-        let allOrders = []; // 存储从数据库获取的订单
-
-        // 音频对象用于播放提示音
+        let allOrders = [];
+        let soundOptions = [];
+        let selectedSoundUrl = '';
         const notificationAudio = new Audio();
 
-        // ====================== 初始化与实时监听 ======================
-        async function initKitchenDisplay() {
-            // 1. 加载现有的未完成订单
-            await loadExistingOrders();
-
-            // 2. 【核心】设置实时监听，监听数据库的“插入”和“更新”事件
-            const channel = supabase
-                .channel('kitchen-orders-live')
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'INSERT',
-                        schema: 'public',
-                        table: 'orders',
-                    },
-                    (payload) => {
-                        // 当有新的订单插入时
-                        console.log('🔔 收到新订单！', payload.new);
-                        handleNewOrder(payload.new);
-                    }
-                )
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'UPDATE',
-                        schema: 'public',
-                        table: 'orders',
-                    },
-                    (payload) => {
-                        // 当订单状态被更新时（如前厅标记完成）
-                        console.log('📝 订单状态更新', payload.new);
-                        updateOrderInList(payload.new);
-                    }
-                )
-                .subscribe();
-
-            console.log('后厨显示系统已启动，正在监听实时订单...');
+        // 初始化
+        async function initKitchen() {
+            await Promise.all([loadExistingOrders(), loadSoundOptions()]);
+            setupRealtimeSubscription(); // 设置实时监听
+            showSystemAlert('后厨系统已启动', '正在实时监听新订单...', 'info');
         }
 
+        // 加载现有未完成订单
         async function loadExistingOrders() {
-            // 获取所有状态不为 ‘done‘ 的订单，按创建时间倒序排列
             const { data, error } = await supabase
                 .from('orders')
                 .select('*')
                 .neq('status', 'done')
                 .order('created_at', { ascending: false });
-
-            if (error) {
-                console.error('加载现有订单失败:', error);
-                return;
+            if (error) console.error('加载订单失败:', error);
+            else {
+                allOrders = data || [];
+                renderOrders();
+                updateStats();
             }
-            allOrders = data || [];
-            renderAllOrders();
-            updateStats();
         }
 
-        // ====================== 订单处理函数 ======================
+        // 加载铃声选项
+        async function loadSoundOptions() {
+            const { data, error } = await supabase.from('sound_options').select('*').order('id');
+            if (error) console.error('加载提示音失败:', error);
+            else {
+                soundOptions = data || [];
+                const select = document.getElementById('soundSelect');
+                select.innerHTML = '<option value="">-- 选择提示音 --</option>' +
+                    soundOptions.map(s => `<option value="${s.url}">${s.name}</option>`).join('');
+                // 默认选择第一个
+                if (soundOptions.length > 0) {
+                    select.value = soundOptions[0].url;
+                    selectedSoundUrl = soundOptions[0].url;
+                }
+                select.onchange = (e) => selectedSoundUrl = e.target.value;
+            }
+        }
+
+        // 设置实时监听
+        function setupRealtimeSubscription() {
+            const channel = supabase
+                .channel('kitchen-orders')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, (payload) => {
+                    console.log('新订单!', payload.new);
+                    handleNewOrder(payload.new);
+                })
+                .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders' }, (payload) => {
+                    console.log('订单更新!', payload.new);
+                    updateOrderInList(payload.new);
+                })
+                .subscribe(status => console.log('实时订阅状态:', status));
+        }
+
         function handleNewOrder(newOrder) {
-            // 将新订单添加到列表最前面
-            allOrders.unshift(newOrder);
-            renderAllOrders();
+            allOrders.unshift(newOrder); // 新订单放最前面
+            renderOrders();
             updateStats();
-            // 播放提示音
-            playNotificationSound();
-            // 可以添加更醒目的视觉提示（如闪烁）
-            showNewOrderAlert(`新订单 #${newOrder.id} 已收到！`);
+            playNotificationSound(); // 播放提示音
+            showSystemAlert('新订单！', `订单 #${newOrder.id} 已收到`, 'success');
         }
 
         function updateOrderInList(updatedOrder) {
-            // 找到列表中对应的订单并更新
-            const index = allOrders.findIndex(order => order.id === updatedOrder.id);
+            const index = allOrders.findIndex(o => o.id === updatedOrder.id);
             if (index !== -1) {
-                // 如果订单被标记为完成，则从当前显示列表中移除
                 if (updatedOrder.status === 'done') {
                     allOrders.splice(index, 1);
                 } else {
                     allOrders[index] = updatedOrder;
                 }
-                renderAllOrders();
+                renderOrders();
                 updateStats();
             }
         }
 
-        // ====================== 渲染与更新UI ======================
-        function renderAllOrders() {
+        // 渲染所有订单
+        function renderOrders() {
             const container = document.getElementById('ordersContainer');
-            const emptyState = document.getElementById('emptyState');
-
+            const emptyEl = document.getElementById('emptyState');
             if (allOrders.length === 0) {
-                emptyState.style.display = 'block';
+                emptyEl.style.display = 'block';
                 container.innerHTML = '';
-                container.appendChild(emptyState);
+                container.appendChild(emptyEl);
                 return;
             }
-
-            emptyState.style.display = 'none';
-
-            // 生成所有订单卡片的HTML
+            emptyEl.style.display = 'none';
             container.innerHTML = allOrders.map(order => {
                 const orderTime = new Date(order.created_at).toLocaleTimeString('zh-CN');
-                let totalAmount = 0;
+                let total = 0;
                 const itemsHtml = order.items.map(item => {
                     const subtotal = item.price * item.quantity;
-                    totalAmount += subtotal;
+                    total += subtotal;
                     return `
                         <div class="order-item">
-                            <span>${item.name} x${item.quantity}</span>
+                            <span>${item.name} ×${item.quantity}</span>
                             <span class="item-total">¥${subtotal.toFixed(2)}</span>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
-
-                // 根据状态确定显示的按钮
-                let actionButtons = '';
+                let actionBtn = '';
                 if (order.status === 'new') {
-                    actionButtons = `
-                        <button class="action-btn btn-start" onclick="updateOrderStatus(${order.id}, 'cooking')">
-                            <i class="fas fa-play-circle"></i> 开始制作
-                        </button>
-                    `;
+                    actionBtn = `<button class="action-btn btn-start" onclick="updateOrderStatus(${order.id}, 'cooking')"><i class="fas fa-play-circle"></i> 开始制作</button>`;
                 } else if (order.status === 'cooking') {
-                    actionButtons = `
-                        <button class="action-btn btn-finish" onclick="updateOrderStatus(${order.id}, 'done')">
-                            <i class="fas fa-check-circle"></i> 制作完成
-                        </button>
-                    `;
+                    actionBtn = `<button class="action-btn btn-finish" onclick="updateOrderStatus(${order.id}, 'done')"><i class="fas fa-check-circle"></i> 制作完成</button>`;
                 }
-
                 return `
                     <div class="order-card ${order.status}">
                         <div class="order-header">
@@ -266,22 +197,15 @@
                                 <div class="order-time">${orderTime}</div>
                             </div>
                             <div class="order-status status-${order.status}">
-                                ${order.status === 'new' ? '新订单' : order.status === 'cooking' ? '制作中' : '已完成'}
+                                ${order.status === 'new' ? '🆕 新订单' : '👨‍🍳 制作中'}
                             </div>
                         </div>
-                        <div class="order-items">
-                            ${itemsHtml}
-                        </div>
+                        <div class="order-items">${itemsHtml}</div>
                         <div class="order-footer">
-                            <div class="order-total">
-                                <strong>总计: <span style="color:#fbbf24; font-size:1.4rem;">¥${totalAmount.toFixed(2)}</span></strong>
-                            </div>
-                            <div class="order-actions">
-                                ${actionButtons}
-                            </div>
+                            <div class="order-total"><strong>总计: <span style="color:#fbbf24; font-size:1.4em;">¥${total.toFixed(2)}</span></strong></div>
+                            <div class="order-actions">${actionBtn}</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
         }
 
@@ -293,42 +217,41 @@
             document.getElementById('countTotal').textContent = allOrders.length;
         }
 
-        // ====================== 交互功能 ======================
-        // 更新订单状态（开始制作/制作完成）
+        // 更新订单状态
         async function updateOrderStatus(orderId, newStatus) {
-            const { error } = await supabase
-                .from('orders')
-                .update({ status: newStatus })
-                .eq('id', orderId);
-
+            const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
             if (error) {
-                console.error('更新订单状态失败:', error);
-                alert('操作失败，请稍后重试。');
+                console.error('更新状态失败:', error);
+                alert('操作失败，请重试');
             } else {
                 console.log(`订单 #${orderId} 状态已更新为: ${newStatus}`);
-                // 状态更新后，实时监听会收到UPDATE事件，UI会自动更新
             }
         }
 
-        // 播放新订单提示音（使用一个可靠的默认音效）
+        // 播放提示音
         function playNotificationSound() {
-            // 使用一个可靠的在线提示音
-            notificationAudio.src = 'https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3';
+            if (!selectedSoundUrl) return;
+            notificationAudio.src = selectedSoundUrl;
             notificationAudio.play().catch(e => {
-                // 部分浏览器要求必须有用户交互才能自动播放，这里忽略错误
-                console.log('提示音自动播放被阻止，需要用户先与页面交互（如点击）。');
+                // 部分浏览器要求用户交互后才能自动播放
+                console.log('自动播放被阻止:', e);
             });
         }
 
-        // 显示新订单提醒（可选）
-        function showNewOrderAlert(message) {
-            // 可以创建一个临时弹出的提示，这里用简单的alert替代
-            // 在实际使用中，建议替换成更友好的非阻塞式提示
-            console.log('🚨 ' + message);
+        function testSelectedSound() {
+            if (!selectedSoundUrl) {
+                alert('请先选择一个提示音');
+                return;
+            }
+            playNotificationSound();
         }
 
-        // ====================== 启动应用 ======================
-        document.addEventListener('DOMContentLoaded', initKitchenDisplay);
+        function showSystemAlert(title, text, type) {
+            console.log(`[${type.toUpperCase()}] ${title}: ${text}`);
+            // 可以在这里实现一个更醒目的界面提示
+        }
+
+        document.addEventListener('DOMContentLoaded', initKitchen);
     </script>
 </body>
 </html>
