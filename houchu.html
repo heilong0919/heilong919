@@ -2,697 +2,333 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <title>后厨订单显示系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>饭店后厨显示系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+        body { background: #0f172a; color: #f8fafc; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
         header {
-            background: linear-gradient(135deg, #d35400, #e67e22);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(211, 84, 0, 0.2);
+            background: linear-gradient(135deg, #ea580c, #dc2626);
+            padding: 1.5rem; border-radius: 16px; margin-bottom: 2rem;
+            text-align: center; box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
         }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .subtitle { color: rgba(255,255,255,0.9); font-size: 1.1rem; }
+
+        .stats-bar {
+            display: flex; justify-content: space-between; background: #1e293b;
+            padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
-        
-        h1 i {
-            font-size: 2rem;
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 800; color: #fbbf24; }
+
+        .orders-container { display: flex; flex-direction: column; gap: 1.5rem; }
+        .order-card {
+            background: #1e293b; border-radius: 16px; padding: 1.8rem;
+            border-left: 6px solid #ea580c; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            animation: pulse-new 2s infinite;
         }
-        
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
+        .order-card.cooking { border-left-color: #0ea5e9; animation: none; }
+        .order-card.done { border-left-color: #10b981; opacity: 0.7; animation: none; }
+        @keyframes pulse-new {
+            0% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(234, 88, 12, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
         }
-        
-        .app-section {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+
+        .order-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.2rem; padding-bottom: 1rem; border-bottom: 2px solid #334155;
         }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: #d35400;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+        .order-id { font-size: 1.5rem; font-weight: 800; color: #fbbf24; }
+        .order-time { color: #94a3b8; font-size: 0.95rem; }
+        .order-status {
+            padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;
         }
-        
-        .section-title i {
-            color: #d35400;
+        .status-new { background: #fed7aa; color: #9a3412; }
+        .status-cooking { background: #bae6fd; color: #075985; }
+        .status-done { background: #bbf7d0; color: #166534; }
+
+        .order-items { margin: 1.5rem 0; }
+        .order-item {
+            display: flex; justify-content: space-between; padding: 0.8rem 0;
+            border-bottom: 1px dashed #475569;
         }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: #d35400;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #a84300;
-            transform: translateY(-2px);
-        }
-        
-        .btn-success {
-            background: #2ecc71;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #27ae60;
-        }
-        
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        
-        .btn-secondary {
-            background: #7f8c8d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #6c7b7d;
-        }
-        
-        .kitchen-orders {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .kitchen-order {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 5px solid #d35400;
-            animation: pulse 2s infinite;
-            transition: all 0.3s;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(211, 84, 0, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(211, 84, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(211, 84, 0, 0); }
-        }
-        
-        .kitchen-order.cooking {
-            border-left-color: #3498db;
-            animation: none;
-        }
-        
-        .kitchen-order.done {
-            border-left-color: #2ecc71;
-            opacity: 0.7;
-            animation: none;
-        }
-        
-        .kitchen-order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .kitchen-order-id {
-            font-weight: 700;
-            color: #d35400;
+        .item-total { font-weight: 700; color: #fbbf24; }
+
+        .order-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 1.5rem; padding-top: 1.2rem; border-top: 2px solid #334155;
             font-size: 1.2rem;
         }
-        
-        .kitchen-order.cooking .kitchen-order-id {
-            color: #3498db;
+        .order-actions { display: flex; gap: 1rem; }
+        .action-btn {
+            padding: 10px 20px; border: none; border-radius: 8px; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;
         }
-        
-        .kitchen-order.done .kitchen-order-id {
-            color: #2ecc71;
-        }
-        
-        .kitchen-order-time {
-            color: #888;
-            font-size: 0.9rem;
-        }
-        
-        .kitchen-order-items {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .kitchen-order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-        }
-        
-        .kitchen-order-item:last-child {
-            border-bottom: none;
-        }
-        
-        .kitchen-order-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-        
+        .btn-start { background: #0ea5e9; color: white; }
+        .btn-finish { background: #10b981; color: white; }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
         .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #aaa;
+            text-align: center; padding: 4rem 2rem; color: #64748b;
         }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-            z-index: 1000;
-            border-left: 5px solid #d35400;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification i {
-            color: #d35400;
-            font-size: 1.5rem;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #888;
-            font-size: 0.9rem;
-            padding: 20px;
-        }
-        
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        .status-new {
-            background-color: #ffefed;
-            color: #e74c3c;
-        }
-        
-        .status-cooking {
-            background-color: #e8f4ff;
-            color: #3498db;
-        }
-        
-        .status-done {
-            background-color: #edf7f0;
-            color: #2ecc71;
-        }
-        
-        .system-controls {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
-        .sound-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 15px;
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-        
-        .sound-select {
-            padding: 8px 15px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            flex: 1;
-        }
+        .empty-state i { font-size: 4rem; margin-bottom: 1.5rem; color: #334155; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-kitchen-set"></i> 饭店后厨显示系统</h1>
-            <p class="subtitle">实时接收前台订单，更新订单状态</p>
+            <h1><i class="fas fa-fire"></i> 后厨订单显示系统</h1>
+            <p class="subtitle">实时订单监控 | 状态更新 | 声音提醒</p >
         </header>
-        
-        <div class="app-section">
-            <h2 class="section-title">
-                <i class="fas fa-list-check"></i> 待处理订单
-                <div class="section-title-actions">
-                    <span id="orderCount">0 个订单</span>
-                </div>
-            </h2>
-            
-            <div class="kitchen-orders" id="kitchenOrders">
-                <div class="empty-state" id="emptyKitchenState">
-                    <i class="fas fa-utensils"></i>
-                    <p>暂无待处理订单</p>
-                    <p>前台发送的订单将在这里实时显示</p>
-                </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div>新订单</div>
+                <div class="stat-number" id="countNew">0</div>
             </div>
-            
-            <div class="system-controls">
-                <button class="btn btn-danger" id="clearAllOrders">
-                    <i class="fas fa-trash"></i> 清空所有订单
-                </button>
-                <button class="btn btn-secondary" id="testSound">
-                    <i class="fas fa-volume-up"></i> 测试声音
-                </button>
+            <div class="stat-item">
+                <div>制作中</div>
+                <div class="stat-number" id="countCooking">0</div>
+            </div>
+            <div class="stat-item">
+                <div>待处理</div>
+                <div class="stat-number" id="countTotal">0</div>
             </div>
         </div>
-        
-        <div class="app-section">
-            <h2 class="section-title"><i class="fas fa-volume-up"></i> 声音设置</h2>
-            
-            <div class="sound-controls">
-                <label for="soundSelect">新订单提醒声音:</label>
-                <select class="sound-select" id="soundSelect">
-                    <!-- 声音选项将通过JavaScript动态生成 -->
-                </select>
-                <button class="btn btn-secondary" id="playSoundBtn">
-                    <i class="fas fa-play"></i> 试听
-                </button>
+
+        <div id="ordersContainer" class="orders-container">
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-utensils"></i>
+                <h3>暂无待处理订单</h3>
+                <p>新订单将在这里实时显示并播放提示音</p >
             </div>
+            <!-- 订单卡片将由JavaScript动态生成 -->
         </div>
-        
-        <!-- 通知 -->
-        <div class="notification" id="notification">
-            <i class="fas fa-bell"></i>
-            <div>
-                <div class="notification-title" id="notificationTitle">新订单!</div>
-                <div class="notification-message" id="notificationMessage">有新的订单已发送到厨房</div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>饭店后厨显示系统 &copy; 2023 | 实时接收前台订单 | 自动声音提醒</p>
-        </footer>
     </div>
 
-    <!-- 音频元素，用于播放提醒声音 -->
-    <audio id="notificationSound" preload="auto"></audio>
-
+    <!-- 引入Supabase JS SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // 应用数据
-        const appData = {
-            // 厨房订单
-            kitchenOrders: [],
-            
-            // 当前选中的声音
-            selectedSoundId: null,
-            
-            // 检查订单的间隔
-            checkInterval: null
-        };
-        
-        // 从本地存储加载数据
-        function loadData() {
-            // 加载订单
-            const savedOrders = localStorage.getItem('kitchenOrders');
-            if (savedOrders) {
-                appData.kitchenOrders = JSON.parse(savedOrders);
-            }
-            
-            // 加载声音
-            const savedSounds = localStorage.getItem('restaurantSounds');
-            if (savedSounds) {
-                window.soundOptions = JSON.parse(savedSounds);
-            } else {
-                // 默认声音
-                window.soundOptions = [
-                    { id: 1, name: "经典提示音", url: "https://assets.mixkit.co/sfx/preview/mixkit-classic-alarm-995.mp3" },
-                    { id: 2, name: "厨房钟声", url: "https://assets.mixkit.co/sfx/preview/mixkit-kitchen-timer-1006.mp3" },
-                    { id: 3, name: "铃声提醒", url: "https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3" }
-                ];
-            }
-            
-            // 加载选中的声音
-            const savedSelectedSound = localStorage.getItem('selectedSoundId');
-            if (savedSelectedSound) {
-                appData.selectedSoundId = parseInt(savedSelectedSound);
-            } else if (window.soundOptions.length > 0) {
-                appData.selectedSoundId = window.soundOptions[0].id;
-            }
+        // ====================== 配置区域 ======================
+        // !!! 重要：将以下两个值替换成你自己的Supabase项目信息（与前台相同） !!!
+        const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的 URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的 Anon Key
+        // ====================================================
+
+        // 初始化Supabase客户端
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 全局状态
+        let allOrders = []; // 存储从数据库获取的订单
+
+        // 音频对象用于播放提示音
+        const notificationAudio = new Audio();
+
+        // ====================== 初始化与实时监听 ======================
+        async function initKitchenDisplay() {
+            // 1. 加载现有的未完成订单
+            await loadExistingOrders();
+
+            // 2. 【核心】设置实时监听，监听数据库的“插入”和“更新”事件
+            const channel = supabase
+                .channel('kitchen-orders-live')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'INSERT',
+                        schema: 'public',
+                        table: 'orders',
+                    },
+                    (payload) => {
+                        // 当有新的订单插入时
+                        console.log('🔔 收到新订单！', payload.new);
+                        handleNewOrder(payload.new);
+                    }
+                )
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'UPDATE',
+                        schema: 'public',
+                        table: 'orders',
+                    },
+                    (payload) => {
+                        // 当订单状态被更新时（如前厅标记完成）
+                        console.log('📝 订单状态更新', payload.new);
+                        updateOrderInList(payload.new);
+                    }
+                )
+                .subscribe();
+
+            console.log('后厨显示系统已启动，正在监听实时订单...');
         }
-        
-        // 保存订单到本地存储
-        function saveOrders() {
-            localStorage.setItem('kitchenOrders', JSON.stringify(appData.kitchenOrders));
-        }
-        
-        // DOM元素
-        const elements = {
-            kitchenOrders: document.getElementById('kitchenOrders'),
-            emptyKitchenState: document.getElementById('emptyKitchenState'),
-            orderCount: document.getElementById('orderCount'),
-            clearAllOrders: document.getElementById('clearAllOrders'),
-            testSound: document.getElementById('testSound'),
-            soundSelect: document.getElementById('soundSelect'),
-            playSoundBtn: document.getElementById('playSoundBtn'),
-            notification: document.getElementById('notification'),
-            notificationTitle: document.getElementById('notificationTitle'),
-            notificationMessage: document.getElementById('notificationMessage'),
-            notificationSound: document.getElementById('notificationSound')
-        };
-        
-        // 初始化应用
-        function initApp() {
-            loadData();
-            setupEventListeners();
-            renderKitchenOrders();
-            renderSoundSelect();
-            
-            // 开始检查新订单
-            startOrderCheck();
-            
-            // 检查是否有新订单需要播放声音
-            checkForNewOrders();
-        }
-        
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 清空所有订单
-            elements.clearAllOrders.addEventListener('click', () => {
-                if (appData.kitchenOrders.length === 0) {
-                    showNotification('没有订单', '当前没有待处理的订单');
-                    return;
-                }
-                
-                if (!confirm('确定要清空所有订单吗？此操作不可撤销。')) {
-                    return;
-                }
-                
-                // 只保留已完成的订单
-                appData.kitchenOrders = appData.kitchenOrders.filter(order => order.status === 'done');
-                saveOrders();
-                renderKitchenOrders();
-                
-                showNotification('订单已清空', '所有未完成的订单已被移除');
-            });
-            
-            // 测试声音
-            elements.testSound.addEventListener('click', () => {
-                playSelectedSound();
-                showNotification('声音测试', '正在播放选中的声音');
-            });
-            
-            // 试听声音
-            elements.playSoundBtn.addEventListener('click', () => {
-                playSelectedSound();
-            });
-            
-            // 声音选择变化
-            elements.soundSelect.addEventListener('change', () => {
-                appData.selectedSoundId = parseInt(elements.soundSelect.value);
-                localStorage.setItem('selectedSoundId', appData.selectedSoundId);
-            });
-        }
-        
-        // 开始检查新订单
-        function startOrderCheck() {
-            // 每2秒检查一次新订单
-            appData.checkInterval = setInterval(() => {
-                checkForNewOrders();
-            }, 2000);
-        }
-        
-        // 检查新订单
-        function checkForNewOrders() {
-            // 保存当前订单数量
-            const oldOrderCount = appData.kitchenOrders.length;
-            
-            // 从本地存储重新加载订单
-            const savedOrders = localStorage.getItem('kitchenOrders');
-            if (savedOrders) {
-                const newOrders = JSON.parse(savedOrders);
-                
-                // 检查是否有新订单
-                if (newOrders.length > oldOrderCount) {
-                    // 找到新订单
-                    const newOrder = newOrders[newOrders.length - 1];
-                    
-                    // 更新订单列表
-                    appData.kitchenOrders = newOrders;
-                    
-                    // 播放提醒声音
-                    playSelectedSound();
-                    
-                    // 显示通知
-                    showNotification('新订单!', `订单 #${newOrder.id} 已收到`);
-                    
-                    // 重新渲染订单
-                    renderKitchenOrders();
-                } else if (newOrders.length < appData.kitchenOrders.length) {
-                    // 订单被删除了，重新加载
-                    appData.kitchenOrders = newOrders;
-                    renderKitchenOrders();
-                }
-            }
-        }
-        
-        // 渲染厨房订单
-        function renderKitchenOrders() {
-            elements.kitchenOrders.innerHTML = '';
-            
-            // 过滤只显示未完成的订单
-            const activeOrders = appData.kitchenOrders.filter(order => order.status !== 'done');
-            
-            // 更新订单计数
-            elements.orderCount.textContent = `${activeOrders.length} 个订单`;
-            
-            if (activeOrders.length === 0) {
-                elements.emptyKitchenState.style.display = 'block';
-                elements.kitchenOrders.appendChild(elements.emptyKitchenState);
+
+        async function loadExistingOrders() {
+            // 获取所有状态不为 ‘done‘ 的订单，按创建时间倒序排列
+            const { data, error } = await supabase
+                .from('orders')
+                .select('*')
+                .neq('status', 'done')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('加载现有订单失败:', error);
                 return;
             }
-            
-            elements.emptyKitchenState.style.display = 'none';
-            
-            activeOrders.forEach(order => {
-                const kitchenOrder = document.createElement('div');
-                kitchenOrder.className = `kitchen-order ${order.status}`;
-                kitchenOrder.dataset.id = order.id;
-                
-                // 计算订单总价
-                const totalPrice = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                
-                let itemsHtml = '';
-                order.items.forEach(item => {
-                    itemsHtml += `
-                        <div class="kitchen-order-item">
-                            <span>${item.name}</span>
-                            <span>x${item.quantity} = ¥${(item.price * item.quantity).toFixed(2)}</span>
+            allOrders = data || [];
+            renderAllOrders();
+            updateStats();
+        }
+
+        // ====================== 订单处理函数 ======================
+        function handleNewOrder(newOrder) {
+            // 将新订单添加到列表最前面
+            allOrders.unshift(newOrder);
+            renderAllOrders();
+            updateStats();
+            // 播放提示音
+            playNotificationSound();
+            // 可以添加更醒目的视觉提示（如闪烁）
+            showNewOrderAlert(`新订单 #${newOrder.id} 已收到！`);
+        }
+
+        function updateOrderInList(updatedOrder) {
+            // 找到列表中对应的订单并更新
+            const index = allOrders.findIndex(order => order.id === updatedOrder.id);
+            if (index !== -1) {
+                // 如果订单被标记为完成，则从当前显示列表中移除
+                if (updatedOrder.status === 'done') {
+                    allOrders.splice(index, 1);
+                } else {
+                    allOrders[index] = updatedOrder;
+                }
+                renderAllOrders();
+                updateStats();
+            }
+        }
+
+        // ====================== 渲染与更新UI ======================
+        function renderAllOrders() {
+            const container = document.getElementById('ordersContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (allOrders.length === 0) {
+                emptyState.style.display = 'block';
+                container.innerHTML = '';
+                container.appendChild(emptyState);
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            // 生成所有订单卡片的HTML
+            container.innerHTML = allOrders.map(order => {
+                const orderTime = new Date(order.created_at).toLocaleTimeString('zh-CN');
+                let totalAmount = 0;
+                const itemsHtml = order.items.map(item => {
+                    const subtotal = item.price * item.quantity;
+                    totalAmount += subtotal;
+                    return `
+                        <div class="order-item">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span class="item-total">¥${subtotal.toFixed(2)}</span>
                         </div>
                     `;
-                });
-                
-                // 状态显示
-                let statusText = '';
+                }).join('');
+
+                // 根据状态确定显示的按钮
+                let actionButtons = '';
                 if (order.status === 'new') {
-                    statusText = '<span class="status-badge status-new">新订单</span>';
+                    actionButtons = `
+                        <button class="action-btn btn-start" onclick="updateOrderStatus(${order.id}, 'cooking')">
+                            <i class="fas fa-play-circle"></i> 开始制作
+                        </button>
+                    `;
                 } else if (order.status === 'cooking') {
-                    statusText = '<span class="status-badge status-cooking">制作中</span>';
+                    actionButtons = `
+                        <button class="action-btn btn-finish" onclick="updateOrderStatus(${order.id}, 'done')">
+                            <i class="fas fa-check-circle"></i> 制作完成
+                        </button>
+                    `;
                 }
-                
-                kitchenOrder.innerHTML = `
-                    <div class="kitchen-order-header">
-                        <div>
-                            <div class="kitchen-order-id">订单 #${order.id} ${statusText}</div>
-                            <div class="kitchen-order-time">下单时间: ${order.time} (${order.date})</div>
+
+                return `
+                    <div class="order-card ${order.status}">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">订单 #${order.id}</div>
+                                <div class="order-time">${orderTime}</div>
+                            </div>
+                            <div class="order-status status-${order.status}">
+                                ${order.status === 'new' ? '新订单' : order.status === 'cooking' ? '制作中' : '已完成'}
+                            </div>
                         </div>
-                    </div>
-                    <div class="kitchen-order-items">
-                        ${itemsHtml}
-                        <div class="kitchen-order-item" style="font-weight: 700; border-top: 1px solid #ddd; margin-top: 5px;">
-                            <span>总计</span>
-                            <span>¥${totalPrice.toFixed(2)}</span>
+                        <div class="order-items">
+                            ${itemsHtml}
                         </div>
-                    </div>
-                    <div class="kitchen-order-controls">
-                        ${order.status === 'new' ? 
-                            `<button class="btn btn-primary start-cooking-btn" data-id="${order.id}">
-                                <i class="fas fa-fire"></i> 开始制作
-                            </button>` : 
-                            order.status === 'cooking' ?
-                            `<button class="btn btn-success finish-cooking-btn" data-id="${order.id}">
-                                <i class="fas fa-check"></i> 制作完成
-                            </button>` : ''
-                        }
+                        <div class="order-footer">
+                            <div class="order-total">
+                                <strong>总计: <span style="color:#fbbf24; font-size:1.4rem;">¥${totalAmount.toFixed(2)}</span></strong>
+                            </div>
+                            <div class="order-actions">
+                                ${actionButtons}
+                            </div>
+                        </div>
                     </div>
                 `;
-                
-                elements.kitchenOrders.appendChild(kitchenOrder);
-            });
-            
-            // 添加开始制作和制作完成按钮的事件监听器
-            document.querySelectorAll('.start-cooking-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const orderId = parseInt(e.target.dataset.id || e.target.closest('button').dataset.id);
-                    updateOrderStatus(orderId, 'cooking');
-                });
-            });
-            
-            document.querySelectorAll('.finish-cooking-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const orderId = parseInt(e.target.dataset.id || e.target.closest('button').dataset.id);
-                    updateOrderStatus(orderId, 'done');
-                });
-            });
+            }).join('');
         }
-        
-        // 渲染声音选择器
-        function renderSoundSelect() {
-            elements.soundSelect.innerHTML = '';
-            
-            window.soundOptions.forEach(sound => {
-                const option = document.createElement('option');
-                option.value = sound.id;
-                option.textContent = sound.name;
-                
-                if (appData.selectedSoundId === sound.id) {
-                    option.selected = true;
-                }
-                
-                elements.soundSelect.appendChild(option);
-            });
+
+        function updateStats() {
+            const countNew = allOrders.filter(o => o.status === 'new').length;
+            const countCooking = allOrders.filter(o => o.status === 'cooking').length;
+            document.getElementById('countNew').textContent = countNew;
+            document.getElementById('countCooking').textContent = countCooking;
+            document.getElementById('countTotal').textContent = allOrders.length;
         }
-        
-        // 更新订单状态
-        function updateOrderStatus(orderId, newStatus) {
-            const orderIndex = appData.kitchenOrders.findIndex(order => order.id === orderId);
-            if (orderIndex !== -1) {
-                appData.kitchenOrders[orderIndex].status = newStatus;
-                saveOrders();
-                renderKitchenOrders();
-                
-                let message = '';
-                if (newStatus === 'cooking') {
-                    message = `订单 #${orderId} 已开始制作`;
-                } else if (newStatus === 'done') {
-                    message = `订单 #${orderId} 已完成制作`;
-                }
-                
-                showNotification('订单状态更新', message);
+
+        // ====================== 交互功能 ======================
+        // 更新订单状态（开始制作/制作完成）
+        async function updateOrderStatus(orderId, newStatus) {
+            const { error } = await supabase
+                .from('orders')
+                .update({ status: newStatus })
+                .eq('id', orderId);
+
+            if (error) {
+                console.error('更新订单状态失败:', error);
+                alert('操作失败，请稍后重试。');
+            } else {
+                console.log(`订单 #${orderId} 状态已更新为: ${newStatus}`);
+                // 状态更新后，实时监听会收到UPDATE事件，UI会自动更新
             }
         }
-        
-        // 播放选中的声音
-        function playSelectedSound() {
-            if (!appData.selectedSoundId) {
-                return;
-            }
-            
-            const selectedSound = window.soundOptions.find(sound => sound.id === appData.selectedSoundId);
-            if (selectedSound) {
-                playSound(selectedSound.url);
-            }
-        }
-        
-        // 播放声音
-        function playSound(url) {
-            elements.notificationSound.src = url;
-            elements.notificationSound.play().catch(e => {
-                console.log("声音播放失败:", e);
-                showNotification('声音播放失败', '请检查声音URL或网络连接');
+
+        // 播放新订单提示音（使用一个可靠的默认音效）
+        function playNotificationSound() {
+            // 使用一个可靠的在线提示音
+            notificationAudio.src = 'https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3';
+            notificationAudio.play().catch(e => {
+                // 部分浏览器要求必须有用户交互才能自动播放，这里忽略错误
+                console.log('提示音自动播放被阻止，需要用户先与页面交互（如点击）。');
             });
         }
-        
-        // 显示通知
-        function showNotification(title, message) {
-            elements.notificationTitle.textContent = title;
-            elements.notificationMessage.textContent = message;
-            
-            elements.notification.classList.add('show');
-            
-            // 3秒后隐藏通知
-            setTimeout(() => {
-                elements.notification.classList.remove('show');
-            }, 3000);
+
+        // 显示新订单提醒（可选）
+        function showNewOrderAlert(message) {
+            // 可以创建一个临时弹出的提示，这里用简单的alert替代
+            // 在实际使用中，建议替换成更友好的非阻塞式提示
+            console.log('🚨 ' + message);
         }
-        
-        // 初始化应用
-        document.addEventListener('DOMContentLoaded', initApp);
+
+        // ====================== 启动应用 ======================
+        document.addEventListener('DOMContentLoaded', initKitchenDisplay);
     </script>
 </body>
 </html>

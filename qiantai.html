@@ -2,1269 +2,537 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <title>饭店管理系统 (前台+管理)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>饭店前台点餐系统</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+        body { background: #f0f2f5; color: #333; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* ===== 登录界面样式 ===== */
+        #loginContainer {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+        .login-box {
+            background: white; padding: 3rem; border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 420px;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
+        .login-title { text-align: center; color: #333; margin-bottom: 1.5rem; font-size: 1.8rem; }
+        .login-input { width: 100%; padding: 15px; margin-bottom: 1rem; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 16px; }
+        .login-btn { width: 100%; padding: 16px; background: #4f46e5; color: white; border: none; border-radius: 10px; font-size: 17px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .login-btn:hover { background: #4338ca; }
+        #loginError { color: #ef4444; text-align: center; margin-top: 1rem; min-height: 1.5rem; }
+
+        /* ===== 主应用界面（登录后显示）===== */
+        #appContainer { display: none; }
         header {
-            background: linear-gradient(135deg, #4a6fa5, #6d9dc5);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(74, 111, 165, 0.2);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white;
+            padding: 1.8rem; border-radius: 16px; margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
         }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-        
-        h1 i {
-            font-size: 2rem;
-        }
-        
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        .app-section {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: #4a6fa5;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        
-        .section-title i {
-            color: #4a6fa5;
-        }
-        
-        .section-title-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: #4a6fa5;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #3a5a8a;
-            transform: translateY(-2px);
-        }
-        
-        .btn-success {
-            background: #2ecc71;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #27ae60;
-        }
-        
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        
-        .btn-secondary {
-            background: #7f8c8d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #6c7b7d;
-        }
-        
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        
-        .menu-item {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            text-align: center;
-            position: relative;
-        }
-        
-        .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
-            border-color: #4a6fa5;
-        }
-        
-        .menu-item.selected {
-            background-color: #f0f5ff;
-            border-color: #4a6fa5;
-        }
-        
-        .menu-item-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .menu-item-price {
-            color: #4a6fa5;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-        
-        .menu-item-category {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 5px;
-            background: #eee;
-            padding: 3px 8px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        
-        .menu-item-delete {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .menu-item:hover .menu-item-delete {
-            opacity: 1;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        .form-input:focus {
-            border-color: #4a6fa5;
-            outline: none;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-        }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            background: #f5f5f5;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 140px;
-        }
-        
-        .quantity-btn {
-            background: #ddd;
-            border: none;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .quantity-btn:hover {
-            background: #ccc;
-        }
-        
-        .quantity-input {
-            width: 60px;
-            text-align: center;
-            border: none;
-            background: transparent;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .order-controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .orders-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
-        
-        .order-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .order-item:last-child {
-            border-bottom: none;
-        }
-        
-        .order-item-info {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        
-        .order-item-name {
-            font-weight: 600;
-        }
-        
-        .order-item-quantity {
-            color: #4a6fa5;
-            font-weight: 700;
-        }
-        
-        .order-item-time {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        
-        .order-item-status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .status-new {
-            background-color: #ffefed;
-            color: #e74c3c;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: #aaa;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #ddd;
-        }
-        
-        .sound-option {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            border-left: 4px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .sound-option:hover {
-            background: #f0f0f0;
-        }
-        
-        .sound-option.selected {
-            background: #f0f5ff;
-            border-left-color: #4a6fa5;
-        }
-        
-        .sound-option-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .sound-option-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .sound-btn {
-            padding: 6px 12px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-            z-index: 1000;
-            border-left: 5px solid #4a6fa5;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification i {
-            color: #4a6fa5;
-            font-size: 1.5rem;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #888;
-            font-size: 0.9rem;
-            padding: 20px;
-        }
-        
-        .tab-container {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-        
-        .tab {
-            padding: 12px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            color: #4a6fa5;
-            border-bottom-color: #4a6fa5;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
+        .user-bar { text-align: right; margin-bottom: 10px; font-size: 0.9rem; color: rgba(255,255,255,0.9); }
+        .user-bar a { color: #fbbf24; margin-left: 15px; text-decoration: none; }
+
+        /* 标签页样式 */
+        .tabs { display: flex; background: white; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .tab { flex: 1; padding: 18px; text-align: center; cursor: pointer; background: #f8fafc; font-weight: 600; color: #64748b; transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .tab.active { background: white; color: #4f46e5; border-bottom-color: #4f46e5; }
+        .tab-content { display: none; background: white; padding: 2rem; border-radius: 0 0 12px 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); margin-bottom: 2rem; }
+        .tab-content.active { display: block; }
+
+        /* 通用卡片和按钮 */
+        .card { background: #f8fafc; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-primary { background: #4f46e5; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+        /* 菜单和订单网格 */
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .menu-item { background: white; padding: 1.2rem; border-radius: 10px; cursor: pointer; border: 2px solid #e2e8f0; transition: all 0.3s; text-align: center; }
+        .menu-item:hover, .menu-item.selected { border-color: #4f46e5; box-shadow: 0 5px 15px rgba(79, 70, 229, 0.1); }
+        .menu-item-name { font-weight: 700; margin-bottom: 0.5rem; }
+        .menu-item-price { color: #10b981; font-size: 1.2rem; font-weight: 800; }
+        .menu-item-category { font-size: 0.8rem; color: #94a3b8; background: #f1f5f9; padding: 3px 10px; border-radius: 20px; margin-top: 0.5rem; }
+
+        .orders-list { max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; }
+        .order-item { padding: 1rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+        .order-item-total { font-weight: 800; color: #0f172a; }
+
+        /* 表单样式 */
+        .form-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .form-input { flex: 1; padding: 12px 15px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+        .form-input:focus { border-color: #4f46e5; outline: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-cash-register"></i> 饭店前台点餐系统</h1>
-            <p class="subtitle">点餐下单，实时同步到后厨</p>
-        </header>
-        
-        <div class="tab-container">
-            <div class="tab active" data-tab="order">点餐下单</div>
-            <div class="tab" data-tab="menu">菜单管理</div>
-            <div class="tab" data-tab="sound">声音设置</div>
+    <!-- ===== 登录界面 ===== -->
+    <div id="loginContainer">
+        <div class="login-box">
+            <h2 class="login-title">🍜 饭店管理系统</h2>
+            <p style="text-align:center; color:#666; margin-bottom:2rem;">请使用管理员账号登录</p>
+            <input type="email" id="loginEmail" class="login-input" placeholder="管理员邮箱" value="heilong@your-restaurant.com">
+            <input type="password" id="loginPassword" class="login-input" placeholder="密码" value="a43863422">
+            <button id="loginButton" class="login-btn">登录系统</button>
+            <p id="loginError"></p>
         </div>
-        
-        <!-- 点餐下单标签 -->
-        <div class="tab-content active" id="order-tab">
-            <div class="app-section">
-                <h2 class="section-title"><i class="fas fa-utensils"></i> 菜品选择</h2>
-                
-                <div class="menu-grid" id="menuGrid">
-                    <!-- 菜单项将通过JavaScript动态生成 -->
-                </div>
-                
-                <div class="order-controls">
-                    <div class="quantity-control">
-                        <button class="quantity-btn" id="decreaseQuantity">-</button>
-                        <input type="text" class="quantity-input" id="quantityInput" value="1" readonly>
-                        <button class="quantity-btn" id="increaseQuantity">+</button>
-                    </div>
-                    <button class="btn btn-primary" id="addToOrder">
-                        <i class="fas fa-plus-circle"></i> 加入订单
-                    </button>
-                    <button class="btn btn-success" id="submitOrder">
-                        <i class="fas fa-paper-plane"></i> 发送到厨房
-                    </button>
-                </div>
-            </div>
-            
-            <div class="app-section">
-                <h2 class="section-title">
-                    <i class="fas fa-list-alt"></i> 当前订单
-                    <button class="btn btn-danger" id="clearOrder">
-                        <i class="fas fa-trash"></i> 清空订单
-                    </button>
-                </h2>
-                
-                <div class="orders-list" id="currentOrders">
-                    <div class="empty-state" id="emptyOrderState">
-                        <i class="fas fa-shopping-cart"></i>
-                        <p>当前没有菜品，请从上方菜单选择</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 菜单管理标签 -->
-        <div class="tab-content" id="menu-tab">
-            <div class="app-section">
-                <h2 class="section-title">
-                    <i class="fas fa-edit"></i> 添加新菜品
-                </h2>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">菜品名称</label>
-                        <input type="text" class="form-input" id="newMenuItemName" placeholder="例如：宫保鸡丁">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">价格(元)</label>
-                        <input type="number" class="form-input" id="newMenuItemPrice" placeholder="例如：38" min="0" step="0.01">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">菜品分类</label>
-                    <input type="text" class="form-input" id="newMenuItemCategory" placeholder="例如：热菜、凉菜、汤类">
-                </div>
-                
-                <button class="btn btn-primary" id="addMenuItem">
-                    <i class="fas fa-plus"></i> 添加菜品
-                </button>
-            </div>
-            
-            <div class="app-section">
-                <h2 class="section-title">
-                    <i class="fas fa-list"></i> 菜品列表
-                </h2>
-                
-                <div class="menu-grid" id="menuList">
-                    <!-- 菜单列表将通过JavaScript动态生成 -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- 声音设置标签 -->
-        <div class="tab-content" id="sound-tab">
-            <div class="app-section">
-                <h2 class="section-title">
-                    <i class="fas fa-plus-circle"></i> 添加新声音
-                </h2>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">声音名称</label>
-                        <input type="text" class="form-input" id="newSoundName" placeholder="例如：厨房钟声">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">声音URL</label>
-                        <input type="text" class="form-input" id="newSoundUrl" placeholder="https://example.com/sound.mp3">
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">试听声音URL</label>
-                    <input type="text" class="form-input" id="testSoundUrl" placeholder="输入URL后点击试听">
-                </div>
-                
-                <div class="form-group">
-                    <button class="btn btn-secondary" id="testSoundBtn">
-                        <i class="fas fa-volume-up"></i> 试听声音
-                    </button>
-                    <button class="btn btn-primary" id="addSoundBtn">
-                        <i class="fas fa-plus"></i> 添加声音
-                    </button>
-                </div>
-            </div>
-            
-            <div class="app-section">
-                <h2 class="section-title">
-                    <i class="fas fa-volume-up"></i> 声音列表
-                    <div class="section-title-actions">
-                        <button class="btn btn-secondary" id="testSelectedSound">
-                            <i class="fas fa-play"></i> 试听选中
-                        </button>
-                    </div>
-                </h2>
-                
-                <div id="soundOptions">
-                    <!-- 声音选项将通过JavaScript动态生成 -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- 通知 -->
-        <div class="notification" id="notification">
-            <i class="fas fa-bell"></i>
-            <div>
-                <div class="notification-title" id="notificationTitle">新订单!</div>
-                <div class="notification-message" id="notificationMessage">有新的订单已发送到厨房</div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>饭店前台点餐系统 &copy; 2023 | 数据实时同步 | 自定义菜单和声音</p>
-        </footer>
     </div>
 
-    <!-- 音频元素，用于播放提醒声音 -->
-    <audio id="notificationSound" preload="auto"></audio>
+    <!-- ===== 主应用界面 (登录后显示) ===== -->
+    <div id="appContainer">
+        <div class="container">
+            <header>
+                <div class="user-bar">
+                    欢迎，<span id="currentUserEmail"></span> | 
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
+                </div>
+                <h1><i class="fas fa-store"></i> 饭店管理系统</h1>
+                <p>前台点餐、后厨同步、菜单与铃声管理</p>
+            </header>
 
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('order')">📱 点餐下单</div>
+                <div class="tab" onclick="switchTab('menu')">📝 菜单管理</div>
+                <div class="tab" onclick="switchTab('sound')">🔔 铃声管理</div>
+            </div>
+
+            <!-- 标签1：点餐下单 -->
+            <div id="tab-order" class="tab-content active">
+                <div class="card">
+                    <h3><i class="fas fa-utensils"></i> 菜品选择</h3>
+                    <div class="menu-grid" id="orderMenuGrid">
+                        <!-- 菜单由JS动态加载 -->
+                    </div>
+                    <div class="form-row">
+                        <div style="display:flex; align-items:center; background:#e2e8f0; border-radius:8px;">
+                            <button onclick="changeQuantity(-1)" style="width:50px; height:50px; border:none; background:#cbd5e1; font-size:1.5rem; cursor:pointer;">-</button>
+                            <input type="text" id="orderQuantity" value="1" readonly style="width:70px; text-align:center; border:none; background:transparent; font-size:1.2rem; font-weight:bold;">
+                            <button onclick="changeQuantity(1)" style="width:50px; height:50px; border:none; background:#cbd5e1; font-size:1.5rem; cursor:pointer;">+</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="addToCurrentOrder()"><i class="fas fa-plus"></i> 加入订单</button>
+                        <button class="btn btn-success" onclick="submitOrderToKitchen()"><i class="fas fa-paper-plane"></i> 发送到厨房</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-shopping-cart"></i> 当前订单</h3>
+                    <div class="orders-list" id="currentOrderList">
+                        <p style="text-align:center; color:#94a3b8;">当前订单为空</p>
+                    </div>
+                    <button class="btn btn-danger" onclick="clearCurrentOrder()"><i class="fas fa-trash"></i> 清空当前订单</button>
+                </div>
+            </div>
+
+            <!-- 标签2：菜单管理 -->
+            <div id="tab-menu" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> 添加新菜品</h3>
+                    <div class="form-row">
+                        <input type="text" id="newDishName" class="form-input" placeholder="菜品名称 (如：鱼香肉丝)">
+                        <input type="number" step="0.01" id="newDishPrice" class="form-input" placeholder="价格 (如：32.00)">
+                        <input type="text" id="newDishCategory" class="form-input" placeholder="分类 (如：热菜、主食)">
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewMenuItem()"><i class="fas fa-save"></i> 保存菜品</button>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-list"></i> 所有菜品</h3>
+                    <div class="menu-grid" id="manageMenuGrid">
+                        <!-- 管理菜单由JS动态加载 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 标签3：铃声管理 -->
+            <div id="tab-sound" class="tab-content">
+                <div class="card">
+                    <h3><i class="fas fa-plus-circle"></i> 添加新提示音</h3>
+                    <div class="form-row">
+                        <input type="text" id="newSoundName" class="form-input" placeholder="铃声名称 (如：经典提示音)">
+                        <input type="text" id="newSoundUrl" class="form-input" placeholder="MP3音频文件直链 (URL)">
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewSound()"><i class="fas fa-save"></i> 保存铃声</button>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-volume-up"></i> 铃声库</h3>
+                    <div id="soundOptionsList">
+                        <!-- 声音选项由JS动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 引入Supabase JS SDK ===== -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // 应用数据
-        const appData = {
-            // 当前订单
+        // ====================== 配置区域 ======================
+        // !!! 重要：将以下两个值替换成你自己的Supabase项目信息 !!!
+        const SUPABASE_URL = 'https://xpipcumwxnvkllcqvsql.supabase.co'; // 替换为你的 URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwaXBjdW13eG52a2xsY3F2c3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjU5NDIsImV4cCI6MjA4MzUwMTk0Mn0.X_qVVwYCxFhM1ScgAal2l-rKaOOQIwRx04t8agvv5cg'; // 替换为你的 Anon Key
+        // ====================================================
+
+        // 初始化Supabase客户端
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: { persistSession: true }
+        });
+
+        // 全局应用状态
+        const appState = {
+            currentUser: null,
+            menuItems: [],
+            soundOptions: [],
             currentOrder: [],
-            
-            // 选中的菜单项ID
-            selectedMenuItemId: null,
-            
-            // 当前选中的声音
-            selectedSoundId: null,
-            
-            // 订单计数器
-            orderCounter: parseInt(localStorage.getItem('orderCounter')) || 1
+            selectedDishId: null
         };
-        
-        // 从本地存储加载数据
-        function loadData() {
-            // 加载菜单
-            const savedMenu = localStorage.getItem('restaurantMenu');
-            if (savedMenu) {
-                window.menuItems = JSON.parse(savedMenu);
+
+        // ====================== 认证与登录 ======================
+        async function initApp() {
+            // 检查现有登录会话
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                appState.currentUser = session.user;
+                showMainApp();
+                loadInitialData();
             } else {
-                // 默认菜单
-                window.menuItems = [
-                    { id: 1, name: "宫保鸡丁", price: 38, category: "热菜" },
-                    { id: 2, name: "鱼香肉丝", price: 32, category: "热菜" },
-                    { id: 3, name: "麻婆豆腐", price: 25, category: "热菜" },
-                    { id: 4, name: "水煮鱼", price: 68, category: "热菜" },
-                    { id: 5, name: "回锅肉", price: 42, category: "热菜" },
-                    { id: 6, name: "酸辣土豆丝", price: 18, category: "素菜" },
-                    { id: 7, name: "西红柿鸡蛋汤", price: 20, category: "汤类" },
-                    { id: 8, name: "米饭", price: 3, category: "主食" },
-                    { id: 9, name: "啤酒", price: 10, category: "酒水" },
-                    { id: 10, name: "可乐", price: 6, category: "饮料" }
-                ];
-                saveMenu();
+                showLoginScreen();
             }
-            
-            // 加载声音
-            const savedSounds = localStorage.getItem('restaurantSounds');
-            if (savedSounds) {
-                window.soundOptions = JSON.parse(savedSounds);
+            // 监听登录状态变化
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN') {
+                    appState.currentUser = session.user;
+                    showMainApp();
+                    loadInitialData();
+                } else if (event === 'SIGNED_OUT') {
+                    appState.currentUser = null;
+                    showLoginScreen();
+                }
+            });
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        }
+
+        function showMainApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            document.getElementById('currentUserEmail').textContent = appState.currentUser.email;
+        }
+
+        // 登录按钮事件
+        document.getElementById('loginButton').addEventListener('click', async () => {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginButton');
+
+            if (!email || !password) {
+                errorEl.textContent = '请输入邮箱和密码';
+                return;
+            }
+
+            btn.textContent = '登录中...';
+            btn.disabled = true;
+            errorEl.textContent = '';
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                errorEl.textContent = `登录失败: ${error.message}`;
+                btn.textContent = '登录系统';
+                btn.disabled = false;
             } else {
-                // 默认声音
-                window.soundOptions = [
-                    { id: 1, name: "经典提示音", url: "https://assets.mixkit.co/sfx/preview/mixkit-classic-alarm-995.mp3" },
-                    { id: 2, name: "厨房钟声", url: "https://assets.mixkit.co/sfx/preview/mixkit-kitchen-timer-1006.mp3" },
-                    { id: 3, name: "铃声提醒", url: "https://assets.mixkit.co/sfx/preview/mixkit-bell-notification-933.mp3" }
-                ];
-                saveSounds();
+                errorEl.textContent = '';
+                btn.textContent = '登录成功！';
             }
-            
-            // 加载选中的声音
-            const savedSelectedSound = localStorage.getItem('selectedSoundId');
-            if (savedSelectedSound) {
-                appData.selectedSoundId = parseInt(savedSelectedSound);
-            } else if (window.soundOptions.length > 0) {
-                appData.selectedSoundId = window.soundOptions[0].id;
+        });
+
+        async function logout() {
+            await supabase.auth.signOut();
+        }
+
+        // ====================== 数据加载 ======================
+        async function loadInitialData() {
+            await Promise.all([
+                loadMenuItems(),
+                loadSoundOptions()
+            ]);
+            renderOrderMenuGrid();
+        }
+
+        async function loadMenuItems() {
+            const { data, error } = await supabase
+                .from('menu_items')
+                .select('*')
+                .order('id');
+            if (!error) appState.menuItems = data || [];
+        }
+
+        async function loadSoundOptions() {
+            const { data, error } = await supabase
+                .from('sound_options')
+                .select('*')
+                .order('id');
+            if (!error) appState.soundOptions = data || [];
+        }
+
+        // ====================== 标签页切换 ======================
+        function switchTab(tabName) {
+            // 更新标签按钮状态
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick*="${tabName}"]`).classList.add('active');
+            // 更新内容区域
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            // 如果是管理标签，重新渲染管理视图
+            if (tabName === 'menu') renderManageMenuGrid();
+            if (tabName === 'sound') renderSoundOptionsList();
+        }
+
+        // ====================== 点餐下单功能 ======================
+        function renderOrderMenuGrid() {
+            const grid = document.getElementById('orderMenuGrid');
+            if (appState.menuItems.length === 0) {
+                grid.innerHTML = '<p>暂无菜品，请先在菜单管理中添加。</p>';
+                return;
             }
+            grid.innerHTML = appState.menuItems.map(item => `
+                <div class="menu-item ${appState.selectedDishId === item.id ? 'selected' : ''}" 
+                     onclick="selectDishForOrder(${item.id})">
+                    <div class="menu-item-name">${item.name}</div>
+                    <div class="menu-item-price">¥${item.price}</div>
+                    <div class="menu-item-category">${item.category}</div>
+                </div>
+            `).join('');
         }
-        
-        // 保存菜单到本地存储
-        function saveMenu() {
-            localStorage.setItem('restaurantMenu', JSON.stringify(window.menuItems));
-        }
-        
-        // 保存声音到本地存储
-        function saveSounds() {
-            localStorage.setItem('restaurantSounds', JSON.stringify(window.soundOptions));
-        }
-        
-        // 保存选中的声音到本地存储
-        function saveSelectedSound() {
-            localStorage.setItem('selectedSoundId', appData.selectedSoundId);
-        }
-        
-        // DOM元素
-        const elements = {
-            menuGrid: document.getElementById('menuGrid'),
-            currentOrders: document.getElementById('currentOrders'),
-            quantityInput: document.getElementById('quantityInput'),
-            decreaseQuantity: document.getElementById('decreaseQuantity'),
-            increaseQuantity: document.getElementById('increaseQuantity'),
-            addToOrder: document.getElementById('addToOrder'),
-            submitOrder: document.getElementById('submitOrder'),
-            clearOrder: document.getElementById('clearOrder'),
-            notification: document.getElementById('notification'),
-            notificationTitle: document.getElementById('notificationTitle'),
-            notificationMessage: document.getElementById('notificationMessage'),
-            notificationSound: document.getElementById('notificationSound'),
-            emptyOrderState: document.getElementById('emptyOrderState'),
-            
-            // 菜单管理元素
-            newMenuItemName: document.getElementById('newMenuItemName'),
-            newMenuItemPrice: document.getElementById('newMenuItemPrice'),
-            newMenuItemCategory: document.getElementById('newMenuItemCategory'),
-            addMenuItem: document.getElementById('addMenuItem'),
-            menuList: document.getElementById('menuList'),
-            
-            // 声音管理元素
-            newSoundName: document.getElementById('newSoundName'),
-            newSoundUrl: document.getElementById('newSoundUrl'),
-            testSoundUrl: document.getElementById('testSoundUrl'),
-            testSoundBtn: document.getElementById('testSoundBtn'),
-            addSoundBtn: document.getElementById('addSoundBtn'),
-            soundOptions: document.getElementById('soundOptions'),
-            testSelectedSound: document.getElementById('testSelectedSound')
+
+        window.selectDishForOrder = function(dishId) {
+            appState.selectedDishId = dishId;
+            renderOrderMenuGrid();
         };
-        
-        // 初始化应用
-        function initApp() {
-            loadData();
-            setupEventListeners();
-            renderMenu();
-            renderSoundOptions();
-            
-            // 默认显示点餐标签
-            switchTab('order');
-        }
-        
-        // 设置事件监听器
-        function setupEventListeners() {
-            // 标签切换
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    switchTab(tabId);
-                });
-            });
-            
-            // 数量控制
-            elements.decreaseQuantity.addEventListener('click', () => {
-                let quantity = parseInt(elements.quantityInput.value);
-                if (quantity > 1) {
-                    quantity--;
-                    elements.quantityInput.value = quantity;
-                }
-            });
-            
-            elements.increaseQuantity.addEventListener('click', () => {
-                let quantity = parseInt(elements.quantityInput.value);
-                quantity++;
-                elements.quantityInput.value = quantity;
-            });
-            
-            // 添加到订单
-            elements.addToOrder.addEventListener('click', () => {
-                if (!appData.selectedMenuItemId) {
-                    showNotification('请选择菜品', '请先点击选择要添加的菜品');
-                    return;
-                }
-                
-                const menuItem = window.menuItems.find(item => item.id === appData.selectedMenuItemId);
-                const quantity = parseInt(elements.quantityInput.value);
-                
-                // 检查是否已存在相同菜品
-                const existingItemIndex = appData.currentOrder.findIndex(item => item.id === menuItem.id);
-                
-                if (existingItemIndex !== -1) {
-                    // 更新数量
-                    appData.currentOrder[existingItemIndex].quantity += quantity;
-                } else {
-                    // 添加新菜品
-                    appData.currentOrder.push({
-                        id: menuItem.id,
-                        name: menuItem.name,
-                        price: menuItem.price,
-                        quantity: quantity,
-                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-                    });
-                }
-                
-                renderCurrentOrder();
-                showNotification('已添加到订单', `${menuItem.name} x${quantity} 已添加到当前订单`);
-            });
-            
-            // 提交订单到厨房
-            elements.submitOrder.addEventListener('click', () => {
-                if (appData.currentOrder.length === 0) {
-                    showNotification('订单为空', '请先添加菜品到订单中');
-                    return;
-                }
-                
-                // 创建厨房订单
-                const kitchenOrder = {
-                    id: appData.orderCounter++,
-                    items: [...appData.currentOrder],
-                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                    date: new Date().toISOString().split('T')[0],
-                    status: 'new' // new, cooking, done
-                };
-                
-                // 保存订单计数器
-                localStorage.setItem('orderCounter', appData.orderCounter);
-                
-                // 获取当前所有订单
-                const existingOrders = localStorage.getItem('kitchenOrders');
-                let kitchenOrders = existingOrders ? JSON.parse(existingOrders) : [];
-                
-                // 添加新订单
-                kitchenOrders.push(kitchenOrder);
-                
-                // 保存到本地存储
-                localStorage.setItem('kitchenOrders', JSON.stringify(kitchenOrders));
-                
-                // 清空当前订单
-                appData.currentOrder = [];
-                renderCurrentOrder();
-                
-                // 播放提醒声音
-                playSelectedSound();
-                
-                // 显示通知
-                showNotification('订单已发送到厨房', `订单 #${kitchenOrder.id} 已发送到后厨`);
-                
-                // 重置数量
-                elements.quantityInput.value = 1;
-                
-                // 切换到点餐标签
-                switchTab('order');
-            });
-            
-            // 清空订单
-            elements.clearOrder.addEventListener('click', () => {
-                if (appData.currentOrder.length === 0) {
-                    showNotification('订单已为空', '当前订单中没有任何菜品');
-                    return;
-                }
-                
-                appData.currentOrder = [];
-                renderCurrentOrder();
-                showNotification('订单已清空', '当前订单中的所有菜品已被移除');
-            });
-            
-            // 添加新菜品
-            elements.addMenuItem.addEventListener('click', () => {
-                const name = elements.newMenuItemName.value.trim();
-                const price = parseFloat(elements.newMenuItemPrice.value);
-                const category = elements.newMenuItemCategory.value.trim();
-                
-                if (!name) {
-                    showNotification('请输入菜品名称', '菜品名称不能为空');
-                    return;
-                }
-                
-                if (isNaN(price) || price <= 0) {
-                    showNotification('请输入有效价格', '价格必须是大于0的数字');
-                    return;
-                }
-                
-                if (!category) {
-                    showNotification('请输入菜品分类', '菜品分类不能为空');
-                    return;
-                }
-                
-                // 生成新ID
-                const newId = window.menuItems.length > 0 ? 
-                    Math.max(...window.menuItems.map(item => item.id)) + 1 : 1;
-                
-                // 添加新菜品
-                window.menuItems.push({
-                    id: newId,
-                    name: name,
-                    price: price,
-                    category: category
-                });
-                
-                // 保存菜单
-                saveMenu();
-                
-                // 重新渲染菜单
-                renderMenu();
-                renderMenuList();
-                
-                // 清空表单
-                elements.newMenuItemName.value = '';
-                elements.newMenuItemPrice.value = '';
-                elements.newMenuItemCategory.value = '';
-                
-                showNotification('菜品添加成功', `${name} 已添加到菜单中`);
-            });
-            
-            // 添加新声音
-            elements.addSoundBtn.addEventListener('click', () => {
-                const name = elements.newSoundName.value.trim();
-                const url = elements.newSoundUrl.value.trim();
-                
-                if (!name) {
-                    showNotification('请输入声音名称', '声音名称不能为空');
-                    return;
-                }
-                
-                if (!url) {
-                    showNotification('请输入声音URL', '声音URL不能为空');
-                    return;
-                }
-                
-                // 生成新ID
-                const newId = window.soundOptions.length > 0 ? 
-                    Math.max(...window.soundOptions.map(sound => sound.id)) + 1 : 1;
-                
-                // 添加新声音
-                window.soundOptions.push({
-                    id: newId,
-                    name: name,
-                    url: url
-                });
-                
-                // 保存声音
-                saveSounds();
-                
-                // 重新渲染声音选项
-                renderSoundOptions();
-                
-                // 清空表单
-                elements.newSoundName.value = '';
-                elements.newSoundUrl.value = '';
-                
-                showNotification('声音添加成功', `${name} 已添加到声音列表中`);
-            });
-            
-            // 测试声音
-            elements.testSoundBtn.addEventListener('click', () => {
-                const url = elements.testSoundUrl.value.trim();
-                
-                if (!url) {
-                    showNotification('请输入声音URL', '请输入要测试的声音URL');
-                    return;
-                }
-                
-                playSound(url);
-                showNotification('声音测试', '正在播放测试声音');
-            });
-            
-            // 测试选中的声音
-            elements.testSelectedSound.addEventListener('click', () => {
-                if (!appData.selectedSoundId) {
-                    showNotification('请选择声音', '请先选择要测试的声音');
-                    return;
-                }
-                
-                playSelectedSound();
-                showNotification('声音测试', '正在播放选中的声音');
-            });
-        }
-        
-        // 切换标签
-        function switchTab(tabId) {
-            // 更新标签状态
-            document.querySelectorAll('.tab').forEach(tab => {
-                if (tab.getAttribute('data-tab') === tabId) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-            
-            // 更新内容显示
-            document.querySelectorAll('.tab-content').forEach(content => {
-                if (content.id === `${tabId}-tab`) {
-                    content.classList.add('active');
-                } else {
-                    content.classList.remove('active');
-                }
-            });
-            
-            // 如果是菜单管理标签，渲染菜单列表
-            if (tabId === 'menu') {
-                renderMenuList();
-            }
-        }
-        
-        // 渲染菜单
-        function renderMenu() {
-            elements.menuGrid.innerHTML = '';
-            
-            if (window.menuItems.length === 0) {
-                elements.menuGrid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <i class="fas fa-utensils"></i>
-                        <p>暂无菜品，请先添加菜单</p>
-                    </div>
-                `;
+
+        window.changeQuantity = function(delta) {
+            const input = document.getElementById('orderQuantity');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+        };
+
+        window.addToCurrentOrder = function() {
+            if (!appState.selectedDishId) {
+                alert('请先选择一个菜品！');
                 return;
             }
-            
-            window.menuItems.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                menuItem.dataset.id = item.id;
-                
-                if (appData.selectedMenuItemId === item.id) {
-                    menuItem.classList.add('selected');
-                }
-                
-                menuItem.innerHTML = `
+            const dish = appState.menuItems.find(d => d.id === appState.selectedDishId);
+            const qty = parseInt(document.getElementById('orderQuantity').value);
+            const existing = appState.currentOrder.find(item => item.id === dish.id);
+            if (existing) {
+                existing.quantity += qty;
+            } else {
+                appState.currentOrder.push({
+                    id: dish.id,
+                    name: dish.name,
+                    price: dish.price,
+                    quantity: qty
+                });
+            }
+            renderCurrentOrder();
+            // 重置选择
+            appState.selectedDishId = null;
+            document.getElementById('orderQuantity').value = 1;
+            renderOrderMenuGrid();
+        };
+
+        function renderCurrentOrder() {
+            const container = document.getElementById('currentOrderList');
+            if (appState.currentOrder.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#94a3b8;">当前订单为空</p>';
+                return;
+            }
+            let total = 0;
+            container.innerHTML = appState.currentOrder.map(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                return `
+                    <div class="order-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>单价: ¥${item.price}</small>
+                        </div>
+                        <div>
+                            <strong>x${item.quantity}</strong><br>
+                            <strong class="order-item-total">¥${subtotal.toFixed(2)}</strong>
+                        </div>
+                    </div>
+                `;
+            }).join('') + `
+                <div class="order-item" style="background:#f1f5f9; font-weight:800;">
+                    <div>订单总计</div>
+                    <div class="order-item-total">¥${total.toFixed(2)}</div>
+                </div>
+            `;
+        }
+
+        window.clearCurrentOrder = function() {
+            if (confirm('确定要清空当前订单吗？')) {
+                appState.currentOrder = [];
+                renderCurrentOrder();
+            }
+        };
+
+        // 【核心功能】提交订单到云端数据库
+        window.submitOrderToKitchen = async function() {
+            if (appState.currentOrder.length === 0) {
+                alert('当前订单为空！');
+                return;
+            }
+            const orderToSend = {
+                items: appState.currentOrder,
+                status: 'new'
+            };
+            const { data, error } = await supabase
+                .from('orders')
+                .insert([orderToSend])
+                .select();
+            if (error) {
+                console.error('提交订单失败:', error);
+                alert('提交失败，请检查网络或控制台错误信息。');
+            } else {
+                alert(`订单 #${data[0].id} 已成功发送到后厨！`);
+                appState.currentOrder = [];
+                renderCurrentOrder();
+            }
+        };
+
+        // ====================== 菜单管理功能 ======================
+        function renderManageMenuGrid() {
+            const grid = document.getElementById('manageMenuGrid');
+            if (appState.menuItems.length === 0) {
+                grid.innerHTML = '<p>暂无菜品。</p>';
+                return;
+            }
+            grid.innerHTML = appState.menuItems.map(item => `
+                <div class="menu-item">
                     <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-price">¥${item.price.toFixed(2)}</div>
+                    <div class="menu-item-price">¥${item.price}</div>
                     <div class="menu-item-category">${item.category}</div>
-                `;
-                
-                menuItem.addEventListener('click', () => {
-                    // 移除之前选中的
-                    document.querySelectorAll('.menu-item').forEach(el => {
-                        el.classList.remove('selected');
-                    });
-                    
-                    // 选中当前项
-                    menuItem.classList.add('selected');
-                    appData.selectedMenuItemId = item.id;
-                });
-                
-                elements.menuGrid.appendChild(menuItem);
-            });
+                    <button onclick="deleteMenuItem(${item.id})" class="btn btn-danger" style="margin-top:10px; width:100%; padding:8px;">
+                        <i class="fas fa-trash"></i> 删除
+                    </button>
+                </div>
+            `).join('');
         }
-        
-        // 渲染菜单列表（用于菜单管理）
-        function renderMenuList() {
-            elements.menuList.innerHTML = '';
-            
-            if (window.menuItems.length === 0) {
-                elements.menuList.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <i class="fas fa-utensils"></i>
-                        <p>暂无菜品，请先添加菜单</p>
-                    </div>
-                `;
+
+        window.addNewMenuItem = async function() {
+            const name = document.getElementById('newDishName').value.trim();
+            const price = parseFloat(document.getElementById('newDishPrice').value);
+            const category = document.getElementById('newDishCategory').value.trim();
+            if (!name || isNaN(price) || !category) {
+                alert('请填写完整的菜品信息！');
                 return;
             }
-            
-            window.menuItems.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                menuItem.dataset.id = item.id;
-                
-                menuItem.innerHTML = `
-                    <div class="menu-item-delete" data-id="${item.id}">
-                        <i class="fas fa-times"></i>
-                    </div>
-                    <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-price">¥${item.price.toFixed(2)}</div>
-                    <div class="menu-item-category">${item.category}</div>
-                `;
-                
-                // 删除按钮事件
-                const deleteBtn = menuItem.querySelector('.menu-item-delete');
-                deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteMenuItem(item.id);
-                });
-                
-                elements.menuList.appendChild(menuItem);
-            });
-        }
-        
-        // 删除菜品
-        function deleteMenuItem(id) {
-            if (!confirm('确定要删除这个菜品吗？')) {
+            const { data, error } = await supabase
+                .from('menu_items')
+                .insert([{ name, price, category }])
+                .select();
+            if (error) {
+                alert('添加失败: ' + error.message);
+            } else {
+                appState.menuItems.push(data[0]);
+                renderOrderMenuGrid();
+                renderManageMenuGrid();
+                // 清空表单
+                document.getElementById('newDishName').value = '';
+                document.getElementById('newDishPrice').value = '';
+                document.getElementById('newDishCategory').value = '';
+                alert(`"${name}" 已添加到菜单！`);
+            }
+        };
+
+        window.deleteMenuItem = async function(id) {
+            if (!confirm('确定要删除这个菜品吗？')) return;
+            const { error } = await supabase
+                .from('menu_items')
+                .delete()
+                .eq('id', id);
+            if (!error) {
+                appState.menuItems = appState.menuItems.filter(item => item.id !== id);
+                renderOrderMenuGrid();
+                renderManageMenuGrid();
+                alert('菜品删除成功！');
+            }
+        };
+
+        // ====================== 铃声管理功能 ======================
+        function renderSoundOptionsList() {
+            const container = document.getElementById('soundOptionsList');
+            if (appState.soundOptions.length === 0) {
+                container.innerHTML = '<p>暂无提示音。</p>';
                 return;
             }
-            
-            // 从菜单中移除
-            const index = window.menuItems.findIndex(item => item.id === id);
-            if (index !== -1) {
-                window.menuItems.splice(index, 1);
-                saveMenu();
-                
-                // 重新渲染
-                renderMenu();
-                renderMenuList();
-                
-                showNotification('菜品删除成功', '菜品已从菜单中移除');
-            }
-        }
-        
-        // 渲染声音选项
-        function renderSoundOptions() {
-            elements.soundOptions.innerHTML = '';
-            
-            if (window.soundOptions.length === 0) {
-                elements.soundOptions.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-volume-mute"></i>
-                        <p>暂无声音，请先添加声音</p>
+            container.innerHTML = appState.soundOptions.map(sound => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; background:white; border-radius:10px; margin-bottom:1rem;">
+                    <div>
+                        <strong>${sound.name}</strong><br>
+                        <small style="color:#64748b; font-size:0.9rem;">${sound.url.substring(0, 60)}...</small>
                     </div>
-                `;
-                return;
-            }
-            
-            window.soundOptions.forEach(sound => {
-                const soundOption = document.createElement('div');
-                soundOption.className = 'sound-option';
-                
-                if (appData.selectedSoundId === sound.id) {
-                    soundOption.classList.add('selected');
-                }
-                
-                soundOption.innerHTML = `
-                    <div class="sound-option-info">
-                        <input type="radio" name="soundOption" value="${sound.id}" 
-                               ${appData.selectedSoundId === sound.id ? 'checked' : ''}>
-                        <span>${sound.name}</span>
-                    </div>
-                    <div class="sound-option-actions">
-                        <button class="sound-btn btn-secondary test-sound-btn" data-url="${sound.url}">
+                    <div>
+                        <button onclick="playSoundPreview('${sound.url}')" class="btn" style="background:#e0f2fe; color:#0369a1; margin-right:10px;">
                             <i class="fas fa-play"></i> 试听
                         </button>
-                        <button class="sound-btn btn-danger delete-sound-btn" data-id="${sound.id}">
+                        <button onclick="deleteSoundOption(${sound.id})" class="btn btn-danger">
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
-                `;
-                
-                // 单选按钮点击事件
-                const radioBtn = soundOption.querySelector('input');
-                radioBtn.addEventListener('change', () => {
-                    if (radioBtn.checked) {
-                        appData.selectedSoundId = sound.id;
-                        saveSelectedSound();
-                        renderSoundOptions();
-                    }
-                });
-                
-                // 试听按钮点击事件
-                const testBtn = soundOption.querySelector('.test-sound-btn');
-                testBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    playSound(sound.url);
-                });
-                
-                // 删除按钮点击事件
-                const deleteBtn = soundOption.querySelector('.delete-sound-btn');
-                deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteSound(sound.id);
-                });
-                
-                elements.soundOptions.appendChild(soundOption);
-            });
-        }
-        
-        // 删除声音
-        function deleteSound(id) {
-            if (!confirm('确定要删除这个声音吗？')) {
-                return;
-            }
-            
-            // 如果是当前选中的声音，需要重新选择
-            if (appData.selectedSoundId === id) {
-                appData.selectedSoundId = null;
-                saveSelectedSound();
-            }
-            
-            // 从声音列表中移除
-            const index = window.soundOptions.findIndex(sound => sound.id === id);
-            if (index !== -1) {
-                window.soundOptions.splice(index, 1);
-                saveSounds();
-                
-                // 重新渲染
-                renderSoundOptions();
-                
-                showNotification('声音删除成功', '声音已从列表中移除');
-            }
-        }
-        
-        // 渲染当前订单
-        function renderCurrentOrder() {
-            elements.currentOrders.innerHTML = '';
-            
-            if (appData.currentOrder.length === 0) {
-                elements.emptyOrderState.style.display = 'block';
-                elements.currentOrders.appendChild(elements.emptyOrderState);
-                return;
-            }
-            
-            elements.emptyOrderState.style.display = 'none';
-            
-            // 计算总价
-            let totalPrice = 0;
-            
-            appData.currentOrder.forEach(item => {
-                const orderItem = document.createElement('div');
-                orderItem.className = 'order-item';
-                
-                const itemTotal = item.price * item.quantity;
-                totalPrice += itemTotal;
-                
-                orderItem.innerHTML = `
-                    <div class="order-item-info">
-                        <div class="order-item-name">${item.name}</div>
-                        <div class="order-item-time">添加时间: ${item.time}</div>
-                    </div>
-                    <div>
-                        <span class="order-item-quantity">x${item.quantity} = ¥${itemTotal}</span>
-                        <div class="order-item-status status-new">待发送</div>
-                    </div>
-                `;
-                
-                elements.currentOrders.appendChild(orderItem);
-            });
-            
-            // 添加总计
-            const totalItem = document.createElement('div');
-            totalItem.className = 'order-item';
-            totalItem.style.backgroundColor = '#f9f9f9';
-            totalItem.style.fontWeight = '700';
-            totalItem.innerHTML = `
-                <div class="order-item-info">
-                    <div class="order-item-name">总计</div>
                 </div>
-                <div>
-                    <span class="order-item-quantity">¥${totalPrice.toFixed(2)}</span>
-                </div>
-            `;
-            
-            elements.currentOrders.appendChild(totalItem);
+            `).join('');
         }
-        
-        // 播放选中的声音
-        function playSelectedSound() {
-            if (!appData.selectedSoundId) {
+
+        window.playSoundPreview = function(url) {
+            const audio = new Audio(url);
+            audio.play().catch(e => console.log('播放失败:', e));
+        };
+
+        window.addNewSound = async function() {
+            const name = document.getElementById('newSoundName').value.trim();
+            const url = document.getElementById('newSoundUrl').value.trim();
+            if (!name || !url) {
+                alert('请填写完整的铃声信息！');
                 return;
             }
-            
-            const selectedSound = window.soundOptions.find(sound => sound.id === appData.selectedSoundId);
-            if (selectedSound) {
-                playSound(selectedSound.url);
+            const { data, error } = await supabase
+                .from('sound_options')
+                .insert([{ name, url }])
+                .select();
+            if (error) {
+                alert('添加失败: ' + error.message);
+            } else {
+                appState.soundOptions.push(data[0]);
+                renderSoundOptionsList();
+                // 清空表单
+                document.getElementById('newSoundName').value = '';
+                document.getElementById('newSoundUrl').value = '';
+                alert(`"${name}" 已添加到铃声库！`);
             }
-        }
-        
-        // 播放声音
-        function playSound(url) {
-            elements.notificationSound.src = url;
-            elements.notificationSound.play().catch(e => {
-                console.log("声音播放失败:", e);
-                showNotification('声音播放失败', '请检查声音URL或网络连接');
-            });
-        }
-        
-        // 显示通知
-        function showNotification(title, message) {
-            elements.notificationTitle.textContent = title;
-            elements.notificationMessage.textContent = message;
-            
-            elements.notification.classList.add('show');
-            
-            // 3秒后隐藏通知
-            setTimeout(() => {
-                elements.notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // 初始化应用
+        };
+
+        window.deleteSoundOption = async function(id) {
+            if (!confirm('确定要删除这个铃声吗？')) return;
+            const { error } = await supabase
+                .from('sound_options')
+                .delete()
+                .eq('id', id);
+            if (!error) {
+                appState.soundOptions = appState.soundOptions.filter(s => s.id !== id);
+                renderSoundOptionsList();
+                alert('铃声删除成功！');
+            }
+        };
+
+        // ====================== 启动应用 ======================
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
